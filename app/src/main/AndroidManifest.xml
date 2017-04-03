@@ -37,6 +37,7 @@
         <activity
             android:name=".ApplyActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".SecondViewActivity"></activity>
     </application>
 
 </manifest>

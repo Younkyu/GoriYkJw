@@ -106,7 +106,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
              itemback.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View v) {
-                     Intent intent = new Intent(context, ApplyActivity.class);
+                     Intent intent = new Intent(context, SecondViewActivity.class);
                      intent.putExtra("id",id);
                      context.startActivity(intent);
                  }
