@@ -32,19 +32,16 @@
             android:id="@+id/tv_apply5_bank"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
             android:layout_marginTop="32dp"
             android:background="@drawable/edittext_custom"
             android:padding="5dp"
             android:text="하나은행"
             android:textAlignment="center"
             android:textColor="#b6b6b6"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintRight_toRightOf="@+id/tv_apply4_payoption"
+            android:textSize="18sp"
             app:layout_constraintTop_toBottomOf="@+id/tv_apply4_payoption"
-            android:layout_marginLeft="8dp"
-            app:layout_constraintLeft_toLeftOf="parent" />
+            android:layout_marginLeft="0dp"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_apply4_payoption" />
 
         <Button
             android:id="@+id/btn_next5"

@@ -12,6 +12,15 @@ public class tutor {
     String tutor_name;
     String class_name;
     int tutor_rating;
+    int tutor_id;
+
+    public int getTutor_id() {
+        return tutor_id;
+    }
+
+    public void setTutor_id(int tutor_id) {
+        this.tutor_id = tutor_id;
+    }
 
     public String getLocation() {
         return location;

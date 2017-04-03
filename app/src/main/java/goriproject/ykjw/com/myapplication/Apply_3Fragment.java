@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 
 public class Apply_3Fragment extends Fragment {
@@ -22,6 +25,7 @@ public class Apply_3Fragment extends Fragment {
 
     ApplyActivity activity;
     Button btn_next_4;
+    ImageView img;
 
     public Apply_3Fragment() {
 
@@ -62,6 +66,8 @@ public class Apply_3Fragment extends Fragment {
                 activity.goAp4();
             }
         });
+        img = (ImageView)view.findViewById(R.id.img_apply_profile4);
+        Glide.with(getContext()).load(R.drawable.profile_dummy).into(img);
         return view;
     }
 

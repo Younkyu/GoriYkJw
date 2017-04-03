@@ -1,5 +1,6 @@
 package goriproject.ykjw.com.myapplication;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,7 @@ public class ApplyActivity extends AppCompatActivity {
     Apply_5Fragment ap5;
     PhoneCheckFragment pc;
     FragmentManager manager;
+    Talent talent;
 
     ImageView img;
     @Override
@@ -44,9 +46,17 @@ public class ApplyActivity extends AppCompatActivity {
         manager = getSupportFragmentManager();
 
         img = (ImageView)findViewById(R.id.apply_profile1);
+        Glide.with(this).load(R.drawable.profile_dummy).into(img);
 
+        Intent intent = getIntent();
+        int id = intent.getExtras().getInt("id");
 
-        Glide.with(this).load(R.drawable.profile_dummy2).into(img);
+        for(Talent data : TalentLoader.talent_datas) {
+            if(data.getTalent_id() == id) {
+                talent = data;
+                break;
+            }
+        }
 
     }
 

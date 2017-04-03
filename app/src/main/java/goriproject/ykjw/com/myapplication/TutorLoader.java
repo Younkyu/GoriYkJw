@@ -20,6 +20,7 @@ public class TutorLoader {
         tutor1.setTutor_name("김지홍");
         tutor1.setClass_name("외국어사용설명서");
         tutor1.setTutor_rating(10);
+        tutor1.setTutor_id(1);
         datas.add(tutor1);
 
         tutor tutor2 = new tutor();
@@ -29,6 +30,7 @@ public class TutorLoader {
         tutor2.setTutor_name("구영재");
         tutor2.setClass_name("컴퓨터사용설명서");
         tutor2.setTutor_rating(30);
+        tutor2.setTutor_id(2);
         datas.add(tutor2);
 
         tutor tutor3 = new tutor();
@@ -38,6 +40,7 @@ public class TutorLoader {
         tutor3.setTutor_name("장한솔");
         tutor3.setClass_name("필라테스사용설명서");
         tutor3.setTutor_rating(50);
+        tutor3.setTutor_id(3);
         datas.add(tutor3);
 
         tutor tutor4 = new tutor();
@@ -47,6 +50,7 @@ public class TutorLoader {
         tutor4.setTutor_name("강선미");
         tutor4.setClass_name("태국어똠양꿍");
         tutor4.setTutor_rating(70);
+        tutor4.setTutor_id(4);
         datas.add(tutor4);
 
         tutor tutor5 = new tutor();
@@ -56,6 +60,7 @@ public class TutorLoader {
         tutor5.setTutor_name("박지언");
         tutor5.setClass_name("C언어사용설명서");
         tutor5.setTutor_rating(80);
+        tutor5.setTutor_id(5);
         datas.add(tutor5);
 
 
@@ -66,6 +71,7 @@ public class TutorLoader {
         tutor6.setTutor_name("김다영");
         tutor6.setClass_name("스쿠버다이빙지랄");
         tutor6.setTutor_rating(10);
+        tutor6.setTutor_id(6);
         datas.add(tutor6);
 
         tutor tutor7 = new tutor();
@@ -75,6 +81,7 @@ public class TutorLoader {
         tutor7.setTutor_name("전주은");
         tutor7.setClass_name("단소로 발바닥때리기");
         tutor7.setTutor_rating(90);
+        tutor7.setTutor_id(7);
         datas.add(tutor7);
 
         tutor tutor8 = new tutor();
@@ -84,6 +91,7 @@ public class TutorLoader {
         tutor8.setTutor_name("장재광");
         tutor8.setClass_name("스페인어초급부터 완벽하게");
         tutor8.setTutor_rating(100);
+        tutor8.setTutor_id(8);
         datas.add(tutor8);
 
         tutor tutor9 = new tutor();
@@ -93,6 +101,7 @@ public class TutorLoader {
         tutor9.setTutor_name("김태호");
         tutor9.setClass_name("나사실컴터못함");
         tutor9.setTutor_rating(100);
+        tutor9.setTutor_id(9);
         datas.add(tutor9);
 
         tutor tutor10 = new tutor();
@@ -102,6 +111,7 @@ public class TutorLoader {
         tutor10.setTutor_name("김환희");
         tutor10.setClass_name("나는예쁘니>~<");
         tutor10.setTutor_rating(95);
+        tutor10.setTutor_id(10);
         datas.add(tutor10);
 
     }

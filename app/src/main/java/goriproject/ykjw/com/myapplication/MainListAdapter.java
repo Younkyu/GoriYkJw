@@ -65,12 +65,13 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
         stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
         holder.class_name.setText(tutors.getClass_name());
         holder.tutor_name.setText(tutors.getTutor_name());
+        holder.id = tutors.tutor_id;
 
-        if(tutors.getCampus().equals("고려대")) {
-            Glide.with(context).load(R.drawable.profile_dummy2).into(holder.imageView2);
-        } else {
+//        if(tutors.getCampus().equals("고려대")) {
+//            Glide.with(context).load(R.drawable.profile_dummy2).into(holder.imageView2);
+//        } else {
             Glide.with(context).load(R.drawable.profile_dummy).into(holder.imageView2);
-        }
+//        }
         Glide.with(context).load(R.drawable.list_dummy).thumbnail(0.1f).into(new ViewTarget<ConstraintLayout, GlideDrawable>(holder.itemback) {
             @Override
             public void onResourceReady(GlideDrawable resource, GlideAnimation anim) {
@@ -91,6 +92,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
         ConstraintLayout itemback;
         TextView class_name,tutor_name;
         RatingBar ratingBar;
+        int id;
 
          CustomViewHolder(View itemView) {
             super(itemView);
@@ -105,6 +107,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
                  @Override
                  public void onClick(View v) {
                      Intent intent = new Intent(context, ApplyActivity.class);
+                     intent.putExtra("id",id);
                      context.startActivity(intent);
                  }
              });

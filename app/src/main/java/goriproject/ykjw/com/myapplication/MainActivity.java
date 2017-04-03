@@ -71,6 +71,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 datas2.addAll(TutorLoader.datas);
             }
         }
+
+        if(TalentLoader.talent_datas.size() ==0) {
+            TalentLoader.loadData();
+        }
+
         rca.notifyDataSetChanged();
 
         if(userid != null) {

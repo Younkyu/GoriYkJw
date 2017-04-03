@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 
 public class Apply_5Fragment extends Fragment {
@@ -19,6 +20,7 @@ public class Apply_5Fragment extends Fragment {
 
     Button btn_applycomplete;
     ApplyActivity activity;
+    TextView tv_apply5_tutorinfo, tv_apply5_tutorname, tv_apply5_tv1;
 
     public Apply_5Fragment() {
 
@@ -58,6 +60,15 @@ public class Apply_5Fragment extends Fragment {
                 activity.goPc();
             }
         });
+
+        tv_apply5_tutorinfo = (TextView)view.findViewById(R.id.tv_apply5_tutorinfo);
+        tv_apply5_tutorname = (TextView)view.findViewById(R.id.tv_apply5_tutorname);
+        tv_apply5_tv1 = (TextView)view.findViewById(R.id.tv_apply5_tv1);
+
+        tv_apply5_tutorname.setText(activity.talent.getTutor_name());
+        tv_apply5_tutorinfo.setText(activity.talent.getTalent_name());
+        tv_apply5_tv1.setText("위의 계좌로 \n"+ activity.talent.getTalent_price()+"을 입금해주세요 \n \n 입금 확인 후, 튜터분과 즉시 연결됩니다.");
+
         return view;
     }
 

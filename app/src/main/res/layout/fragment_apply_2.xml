@@ -79,7 +79,7 @@
             app:layout_constraintRight_toLeftOf="@+id/textView34" />
 
         <goriproject.ykjw.com.myapplication.CircleImageView
-            android:id="@+id/img_apply1_profile2"
+            android:id="@+id/img_apply2_profile"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginLeft="16dp"
@@ -101,10 +101,10 @@
             android:paddingLeft="20dp"
             android:paddingTop="10dp"
             android:text="수업 준비를 위해 아래 항목들에 대해\n미리 말씀해 주세요!"
-            app:layout_constraintBottom_toBottomOf="@+id/img_apply1_profile2"
-            app:layout_constraintLeft_toRightOf="@+id/img_apply1_profile2"
+            app:layout_constraintBottom_toBottomOf="@+id/img_apply2_profile"
+            app:layout_constraintLeft_toRightOf="@+id/img_apply2_profile"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/img_apply1_profile2" />
+            app:layout_constraintTop_toTopOf="@+id/img_apply2_profile" />
 
         <Button
             android:id="@+id/btn_next3"

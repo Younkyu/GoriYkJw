@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class Apply_4Fragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -21,6 +22,7 @@ public class Apply_4Fragment extends Fragment {
 
     ApplyActivity activity;
     Button btn_next_5;
+    TextView tv_apply4_class,tv_apply4_payment,tv_apply4_tutorname;
 
     public Apply_4Fragment() {
         // Required empty public constructor
@@ -60,6 +62,15 @@ public class Apply_4Fragment extends Fragment {
                 activity.goAp5();
             }
         });
+
+        tv_apply4_class = (TextView)view.findViewById(R.id.tv_apply4_class);
+        tv_apply4_payment = (TextView)view.findViewById(R.id.tv_apply4_payment);
+        tv_apply4_tutorname = (TextView)view.findViewById(R.id.tv_apply4_tutorname);
+
+        tv_apply4_class.setText(activity.talent.getTalent_name());
+        tv_apply4_payment.setText(activity.talent.getTalent_price());
+        tv_apply4_tutorname.setText(activity.talent.getTutor_name());
+
         return view;
     }
 
