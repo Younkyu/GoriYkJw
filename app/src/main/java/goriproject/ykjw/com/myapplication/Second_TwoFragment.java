@@ -16,14 +16,14 @@ import android.widget.RadioGroup;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TwoFragment extends Fragment {
+public class Second_TwoFragment extends Fragment {
 
     Context context=null;
 
     int CHECKBOXCOUNT = 3;
     private View view;
 
-    public TwoFragment() {
+    public Second_TwoFragment() {
         // Required empty public constructor
     }
 
@@ -34,7 +34,7 @@ public class TwoFragment extends Fragment {
         if(view != null){
             return view;
         }
-        view = inflater.inflate(R.layout.fragment_two, container, false);
+        view = inflater.inflate(R.layout.fragment_second_two, container, false);
 
         showLocationConfirm();
 

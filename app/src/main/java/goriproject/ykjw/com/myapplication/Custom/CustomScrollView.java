@@ -1,4 +1,4 @@
-package goriproject.ykjw.com.myapplication.Test;
+package goriproject.ykjw.com.myapplication.Custom;
 
 import android.content.Context;
 import android.util.AttributeSet;

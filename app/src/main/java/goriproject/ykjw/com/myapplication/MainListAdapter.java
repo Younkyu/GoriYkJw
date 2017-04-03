@@ -4,12 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,10 +19,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.ViewTarget;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.microedition.khronos.opengles.GL;
 
 /**
  * Created by Younkyu on 2017-03-23.
@@ -65,7 +58,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
         stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
         holder.class_name.setText(tutors.getClass_name());
         holder.tutor_name.setText(tutors.getTutor_name());
-        holder.id = tutors.tutor_id;
+        holder.id = tutors.getTutor_id();
 
 //        if(tutors.getCampus().equals("고려대")) {
 //            Glide.with(context).load(R.drawable.profile_dummy2).into(holder.imageView2);
@@ -106,7 +99,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
              itemback.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View v) {
-                     Intent intent = new Intent(context, SecondViewActivity.class);
+                     Intent intent = new Intent(context, SecondActivity.class);
                      intent.putExtra("id",id);
                      context.startActivity(intent);
                  }

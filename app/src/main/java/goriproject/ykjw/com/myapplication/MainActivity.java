@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.tsengvn.typekit.TypekitContextWrapper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btn_campus_jungang, btn_location_jongro,btn_location_habjung,btn_location_yongsan,btn_location_hehwa, btn_location_mokdong;
     Button btn_category_music, btn_category_helth,btn_category_other,btn_campus_other,btn_location_other,btn_category_language,
             btn_category_cumputer, btn_category_sports, btn_category_major;
+
     DrawerLayout drawer;
     NavigationView navigationView;
 
@@ -621,6 +623,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 
 }

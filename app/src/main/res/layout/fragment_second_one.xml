@@ -46,15 +46,16 @@
         android:textAlignment="center" />
 
     <TextView
+        android:id="@+id/txtOne3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/txtOne2"
         android:layout_marginTop="20dp"
-        android:text=
-            "- 입사 후 엑셀 작업만 죽어라 한 대기업 대리.
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="- 입사 후 엑셀 작업만 죽어라 한 대기업 대리.
 - 보고서 작업은 업무 소요시간을 줄이기 힘들어도, 엑셀은 필요한 함수 및 포인트들을 알면 시간을 많이 아낄 수 있음을 몸으로 터득함.
-- 반복되는 실무 함수 설명 및 숨겨진 노하우 전수를 통해 워크 라이프 밸런스가 갖춰진 사회를 만드는게 꿈."
-        android:id="@+id/txtOne3"
-        android:layout_below="@+id/txtOne2"/>
+- 반복되는 실무 함수 설명 및 숨겨진 노하우 전수를 통해 워크 라이프 밸런스가 갖춰진 사회를 만드는게 꿈." />
 
     <View
         android:layout_width="match_parent"
@@ -82,6 +83,13 @@
         android:textAlignment="center" />
 
     <TextView
+        android:id="@+id/txtOne5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtOne4"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:text="크게 두 부류로 나눌 수 있습니다.
 
 1) 처음부터 체계적으로 배워나가야 하는 왕초보
@@ -91,12 +99,7 @@
 2) 노하우 습득을 통해 좀 더 빨리 퇴근하고 싶으신 분
 (ex. 엑셀은 대충 알지만 좀 더 능률있게 일하고 싶으신 분)
 
-1:1 강의의 경우 시간당 2만원 / 2명 이상 그룹 클래스의 경우 시간당 1.5만원 입니다."
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtOne5"
-        android:layout_below="@+id/txtOne4"/>
+1:1 강의의 경우 시간당 2만원 / 2명 이상 그룹 클래스의 경우 시간당 1.5만원 입니다." />
 
     <View
         android:layout_width="match_parent"
@@ -124,16 +127,18 @@
         android:textAlignment="center" />
 
     <TextView
+        android:id="@+id/txtOne7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtOne6"
+        android:layout_marginTop="20dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:text="- 엑셀 활용 실무 업무경력을 살린 노하우 전수
 - 현업에서 활용할만한 업무 프로그램 소개
 - 업무 시간 단축의 핵심은 엑셀을 통해 얼마나 자동화 시킬 수 있느냐 이므로, 그 부분에 대해서 원리 설명
 - 2시간씩 3회 집중 학습 예정
-"
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtOne7"
-        android:layout_below="@+id/txtOne6"/>
+" />
 
     <View
         android:layout_width="match_parent"

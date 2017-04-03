@@ -2,18 +2,24 @@ package goriproject.ykjw.com.myapplication;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -21,26 +27,35 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import goriproject.ykjw.com.myapplication.Test.CustomPager;
-import goriproject.ykjw.com.myapplication.Test.CustomScrollView;
-import goriproject.ykjw.com.myapplication.Test.RadiusImageView;
-import goriproject.ykjw.com.myapplication.Test.RectangleView;
+import com.tsengvn.typekit.TypekitContextWrapper;
 
-public class SecondViewActivity extends AppCompatActivity {
+import goriproject.ykjw.com.myapplication.Custom.CustomPager;
+import goriproject.ykjw.com.myapplication.Custom.CustomScrollView;
+import goriproject.ykjw.com.myapplication.Custom.RadiusImageView;
+import goriproject.ykjw.com.myapplication.Custom.RectangleView;
+
+import static goriproject.ykjw.com.myapplication.Statics.useremail;
+import static goriproject.ykjw.com.myapplication.Statics.userid;
+import static goriproject.ykjw.com.myapplication.Statics.username;
+
+public class SecondActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "RAPSTAR";
     private static final String[] LIST_MENU = { "탈잉 소개", "MY PAGE", "수업신청서", "LOG OUT", "튜터 등록" };
 
-    OneFragment one;                        // 프래그먼트
-    TwoFragment two;
-    ThreeFragment three;
-    FourFragment four;
-
+    Second_OneFragment one;                        // 프래그먼트
+    Second_TwoFragment two;
+    Second_ThreeFragment three;
+    Second_FourFragment four;
+    RatingBar rating_second;
     FrameLayout frameLayout;
 
     ImageView imageView1;                   // 이미지뷰
@@ -48,12 +63,17 @@ public class SecondViewActivity extends AppCompatActivity {
 
     CheckBox checkbox_wishList;             // 체크박스
 
-    Button btnDrawerMenu;                   // 버튼 드로어
+    Button btn_second_apply;                   // 버튼 드로어
     RelativeLayout drawer_relativeLayout;
-
+    ImageButton btnDrawerMenu;
     TextView subTitle, txtTitle;
     TabLayout tab, subTab;
     CustomScrollView scrollView;
+
+    DrawerLayout drawer;
+    NavigationView navigationView;
+
+    Talent talent;
 
     float txtTitle_y_position = 0;
     float tab_y_position = 0;
@@ -69,27 +89,60 @@ public class SecondViewActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(userid != null) {
+            navigationView = (NavigationView) findViewById(R.id.nav_view);
+            // get menu from navigationView
+            Menu menu = navigationView.getMenu();
+            // find MenuItem you want to change
+            MenuItem logoutitem = menu.findItem(R.id.menu_signinout);
+            logoutitem.setTitle(R.string.logoutitem);
+        }
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second_view);
 
-        // Drawer 만들기
-        ListView listView = (ListView)findViewById(R.id.drawer_listView);
-        ArrayAdapter listAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, LIST_MENU);
-        listView.setAdapter(listAdapter);
-        drawer_relativeLayout = (RelativeLayout)findViewById(R.id.drawer_relativelayout);
-        btnDrawerMenu = (Button)findViewById(R.id.btnDrawerMenu);
-        final DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 
+
+        Intent intent = getIntent();
+        final int id = intent.getExtras().getInt("id");
+
+        for(Talent data : TalentLoader.talent_datas) {
+            if(data.getTalent_id() == id) {
+                talent = data;
+                break;
+            }
+        }
+        btnDrawerMenu = (ImageButton)findViewById(R.id.btnDrawerMenu);
         btnDrawerMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                drawerLayout.openDrawer(drawer_relativeLayout);
+                drawer.openDrawer(GravityCompat.END);
+            }
+        });
+        btn_second_apply = (Button)findViewById(R.id.btn_second_apply);
+        btn_second_apply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SecondActivity.this, ApplyActivity.class);
+                intent.putExtra("id",id);
+                startActivity(intent);
             }
         });
 
+
+        //드로어레이아웃
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        navigationView  = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         // 체크 박스
         checkbox_wishList = (CheckBox)findViewById(R.id.checkbox_wishList);
@@ -102,14 +155,14 @@ public class SecondViewActivity extends AppCompatActivity {
 
         // 텍스트뷰
         subTitle = (TextView)findViewById(R.id.subTitle);
-        txtTitle = (TextView)findViewById(R.id.txtTitle);
+        txtTitle = (TextView)findViewById(R.id.txt_second_Title);
 
 
         // 프래그먼트 초기화
-        one = new OneFragment();
-        two = new TwoFragment();
-        three = new ThreeFragment();
-        four = new FourFragment();
+        one = new Second_OneFragment();
+        two = new Second_TwoFragment();
+        three = new Second_ThreeFragment();
+        four = new Second_FourFragment();
 
         // 탭 레이아웃 & 뷰페이저 초기화
         final CustomPager viewPager = (CustomPager)findViewById(R.id.viewPager);
@@ -162,11 +215,32 @@ public class SecondViewActivity extends AppCompatActivity {
             }
         });
 
-        // 커스텀 뷰를 담을 프레임아웃
-        RectangleView view = new RectangleView(this);
-        frameLayout = (FrameLayout)findViewById(R.id.framelayout);
-        frameLayout.addView(view);
+        rating_second = (RatingBar)findViewById(R.id.rating_second);
+        TextView tv_second_new = (TextView)findViewById(R.id.tv_second_new);
+        if(talent.getNumoftuty() != 0) {
+            rating_second.setRating(talent.getTalent__rating()/20);
+            //레이팅바의 색깔을 바꿔야 할 경우에 사용
+            LayerDrawable stars = (LayerDrawable) rating_second.getProgressDrawable();
+            stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
+            tv_second_new.setVisibility(View.GONE);
+        } else {
+            rating_second.setVisibility(View.GONE);
+        }
 
+        Button btn_second_numoftuty = (Button)findViewById(R.id.btn_second_numoftuty);
+        TextView txt_name = (TextView)findViewById(R.id.txt_second_name);
+        TextView txt_title = (TextView)findViewById(R.id.txt_second_Title);
+        TextView tv_location = (TextView)findViewById(R.id.tv_second_location);
+        TextView tv_price = (TextView)findViewById(R.id.tv_second_timeper);
+        TextView tv_maxman = (TextView)findViewById(R.id.tv_second_maxman);
+        TextView tv_schedule = (TextView)findViewById(R.id.tv_second_schedule);
+        txt_name.setText(talent.getTutor_name());
+        txt_title.setText(talent.getTalent_name());
+        tv_location.setText(talent.getTalent_location().get(1));
+        tv_price.setText(talent.getTimeperlesson());
+        tv_maxman.setText(talent.getMaxman());
+        tv_schedule.setText(talent.getTalent_price()+"/회");
+        btn_second_numoftuty.setText("누적참여자"+talent.getNumoftuty()+"명");
     }
 
 
@@ -191,9 +265,47 @@ public class SecondViewActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
 
+        int id = item.getItemId();
 
+        if (id == R.id.menu_introduce_gori) {
+            //TODO 고리소개 페이지로드
+        } else if (id == R.id.menu_signinout) {
+            if(userid != null) {
+                userid = null;
+                username = null;
+                useremail = null;
+                item.setTitle("로그인");
+                Toast.makeText(SecondActivity.this, "정상적으로 로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+            }else {
+                Intent intent = new Intent(SecondActivity.this, SignInActivity.class);
+                startActivity(intent);
+            }
 
+        } else if (id == R.id.menu_mypage) {
+            //TODO 마이페이지 고
+        } else if (id == R.id.menu_tutor_go) {
+            // 아직 구현할 생각 없음
+            Toast.makeText(SecondActivity.this, "튜터등록은 웹사이트에서 해주세요!", Toast.LENGTH_LONG).show();
+        }
+
+        drawer.closeDrawer(GravityCompat.END);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.END)) {
+            drawer.closeDrawer(GravityCompat.END);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     class PagerAdapter extends FragmentStatePagerAdapter {
         final int PAGE_COUNT = 4;
@@ -240,4 +352,10 @@ public class SecondViewActivity extends AppCompatActivity {
         }
 
     }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
+    }
+
 }

@@ -1,4 +1,4 @@
-package goriproject.ykjw.com.myapplication.Test;
+package goriproject.ykjw.com.myapplication.Custom;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -21,10 +21,10 @@ public class RectangleView extends View {
     Paint text_Four_Frame = new Paint();
 
     Context ctx;
-    String text1 = "";
-    String text2 = "";
-    String text3 = "";
-    String text4 = "";
+    public String text1 = "";
+    public String text2 = "";
+    public String text3 = "";
+    public String text4 = "";
 
     Bitmap imgLocation, imgNumPple, imgPrice, imgSchedule;
 

@@ -1,4 +1,4 @@
-package goriproject.ykjw.com.myapplication.Test;
+package goriproject.ykjw.com.myapplication.Custom;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
@@ -22,12 +22,12 @@ public class CustomPager extends ViewPager {
     }
 
 
-    @Override
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (mCurrentView == null) {
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-            return;
-        }
+        @Override
+        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            if (mCurrentView == null) {
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+                return;
+            }
         int height = 0;
         mCurrentView.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
         int h = mCurrentView.getMeasuredHeight();
