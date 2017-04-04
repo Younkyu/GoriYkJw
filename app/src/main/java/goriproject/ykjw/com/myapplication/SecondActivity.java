@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -35,6 +36,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.tsengvn.typekit.TypekitContextWrapper;
 
 import goriproject.ykjw.com.myapplication.Custom.CustomPager;
@@ -109,7 +114,8 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second_view);
 
-
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
 
         Intent intent = getIntent();
         final int id = intent.getExtras().getInt("id");
@@ -163,6 +169,10 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         two = new Second_TwoFragment();
         three = new Second_ThreeFragment();
         four = new Second_FourFragment();
+        one.setTalent(talent);
+        two.setTalent(talent);
+        three.setTalent(talent);
+        four.setTalent(talent);
 
         // 탭 레이아웃 & 뷰페이저 초기화
         final CustomPager viewPager = (CustomPager)findViewById(R.id.viewPager);
@@ -357,5 +367,28 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
+
+    public void shareFacebook(View view)
+    {
+        ShareLinkContent content = new ShareLinkContent.Builder()
+                //링크의 콘텐츠 제목
+                .setContentTitle("페이스북 공유 링크입니다.")
+
+                //게시물에 표시될 썸네일 이미지의 URL
+                .setImageUrl(Uri.parse("https://lh3.googleusercontent.com/hmVeH1KmKDy1ozUlrjtYMHpzSDrBv9NSbZ0DPLzR8HdBip9kx3wn_sXmHr3wepCHXA=rw"))
+
+                //공유될 링크
+                .setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.handykim.nbit.everytimerfree"))
+
+                //게일반적으로 2~4개의 문장으로 구성된 콘텐츠 설명
+                .setContentDescription("문장1, 문장2, 문장3, 문장4")
+                .build();
+
+        ShareDialog shareDialog = new ShareDialog(this);
+        shareDialog.show(content, ShareDialog.Mode.FEED);   //AUTOMATIC, FEED, NATIVE, WEB 등이 있으며 이는 다이얼로그 형식을 말합니다.
+    }
+
+
+
 
 }

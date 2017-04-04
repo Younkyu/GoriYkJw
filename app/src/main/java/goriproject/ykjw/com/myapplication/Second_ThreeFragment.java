@@ -12,10 +12,14 @@ import android.view.ViewGroup;
  * A simple {@link Fragment} subclass.
  */
 public class Second_ThreeFragment extends Fragment {
-
+    private Talent talent;
 
     public Second_ThreeFragment() {
         // Required empty public constructor
+    }
+    public void setTalent(Talent talenta) {
+        // Required empty public constructor
+        talent = talenta;
     }
 
 

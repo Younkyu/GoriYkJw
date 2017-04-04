@@ -19,12 +19,16 @@ import android.widget.RadioGroup;
 public class Second_TwoFragment extends Fragment {
 
     Context context=null;
-
+    private Talent talent;
     int CHECKBOXCOUNT = 3;
     private View view;
 
     public Second_TwoFragment() {
         // Required empty public constructor
+    }
+    public void setTalent(Talent talenta) {
+        // Required empty public constructor
+        talent = talenta;
     }
 
 

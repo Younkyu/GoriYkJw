@@ -13,9 +13,13 @@ import android.view.ViewGroup;
  */
 public class Second_FourFragment extends Fragment {
 
-
+    private Talent talent;
     public Second_FourFragment() {
         // Required empty public constructor
+    }
+    public void setTalent(Talent talenta) {
+        // Required empty public constructor
+        talent = talenta;
     }
 
 

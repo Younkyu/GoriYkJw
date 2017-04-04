@@ -157,7 +157,7 @@ public class TalentLoader {
         Talent7.addTalent_time("10시-22시");
         Talent7.addTalent_time("14시-18시");
         Talent7.addTalent_time("22시-24시");
-        Talent7.addTalent_day("월");
+        Talent7.addTalent_day("월");//
         Talent7.addTalent_day("수");
         Talent7.addTalent_day("목");
         Talent7.addTalent_day("토");
