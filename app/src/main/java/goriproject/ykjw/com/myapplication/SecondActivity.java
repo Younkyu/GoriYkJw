@@ -173,6 +173,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         two.setTalent(talent);
         three.setTalent(talent);
         four.setTalent(talent);
+        one.setActivity(this);
 
         // 탭 레이아웃 & 뷰페이저 초기화
         final CustomPager viewPager = (CustomPager)findViewById(R.id.viewPager);
