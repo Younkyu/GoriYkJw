@@ -126,4 +126,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
+
+    public void signingo(View view ) {
+        Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void finishsignup(View view ) {
+        finish();
+    }
 }

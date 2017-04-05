@@ -121,4 +121,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
+
+    public void finishsignin(View view ) {
+        finish();
+    }
 }

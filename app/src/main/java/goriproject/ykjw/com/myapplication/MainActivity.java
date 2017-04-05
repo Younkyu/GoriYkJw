@@ -589,8 +589,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Handle navigation view item clicks here.
 
         int id = item.getItemId();
-
+        Intent intent;
         if (id == R.id.menu_introduce_gori) {
+            intent= new Intent(MainActivity.this, IntroduceGoriActivity.class);
+            startActivity(intent);
            //TODO 고리소개 페이지로드
         } else if (id == R.id.menu_signinout) {
             if(userid != null) {
@@ -600,7 +602,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 item.setTitle("로그인");
                 Toast.makeText(MainActivity.this, "정상적으로 로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
             }else {
-                Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+                intent = new Intent(MainActivity.this, SignInActivity.class);
                 startActivity(intent);
             }
 
