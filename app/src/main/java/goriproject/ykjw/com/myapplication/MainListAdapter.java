@@ -63,9 +63,9 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
 //        if(tutors.getCampus().equals("고려대")) {
 //            Glide.with(context).load(R.drawable.profile_dummy2).into(holder.imageView2);
 //        } else {
-            Glide.with(context).load(R.drawable.profile_dummy).into(holder.imageView2);
+            Glide.with(context).load(tutors.getProfileurl()).into(holder.imageView2);
 //        }
-        Glide.with(context).load(R.drawable.list_dummy).thumbnail(0.1f).into(new ViewTarget<ConstraintLayout, GlideDrawable>(holder.itemback) {
+        Glide.with(context).load(tutors.getImgUrl()).thumbnail(0.1f).into(new ViewTarget<ConstraintLayout, GlideDrawable>(holder.itemback) {
             @Override
             public void onResourceReady(GlideDrawable resource, GlideAnimation anim) {
                 ConstraintLayout myView = this.view;

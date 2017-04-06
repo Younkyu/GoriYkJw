@@ -45,7 +45,7 @@
         <activity
             android:name=".SecondActivity"
             android:launchMode="singleInstance" />
-        <activity android:name=".IntroduceGoriActivity"></activity>
+        <activity android:name=".IntroduceGoriActivity" />
     </application>
 
 </manifest>

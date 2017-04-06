@@ -66,14 +66,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+
         if(TutorLoader.datas.size() == 0) {
             TutorLoader.loadData();
             sortTop(TutorLoader.datas);
+            //Toast.makeText(this, TutorLoader.datasRealy.size(), Toast.LENGTH_SHORT).show();
             if(datas2.size() ==0) {
                 datas2.addAll(TutorLoader.datas);
             }
         }
-
         if(TalentLoader.talent_datas.size() ==0) {
             TalentLoader.loadData();
         }
@@ -106,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editText = (EditText)findViewById(R.id.editText);
         datas2 = new ArrayList<>();
 
+
         editText.addTextChangedListener(this);
 
         //1. recycler 뷰 가져오기
@@ -127,6 +129,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Glide.with(this).load(R.drawable.main_image).thumbnail(0.1f).into(mainimg);
 
         button_connect();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if(datas2.size()!=0) {
+            rca.notifyDataSetChanged();
+        }
 
     }
 
