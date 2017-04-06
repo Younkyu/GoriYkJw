@@ -126,13 +126,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
                 break;
             }
         }
-        btnDrawerMenu = (ImageButton)findViewById(R.id.btnDrawerMenu);
-        btnDrawerMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawer.openDrawer(GravityCompat.END);
-            }
-        });
+
         btn_second_apply = (Button)findViewById(R.id.btn_second_apply);
         btn_second_apply.setOnClickListener(new View.OnClickListener() {
             @Override
