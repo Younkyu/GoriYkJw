@@ -80,6 +80,8 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
         return datas.size();
     }
 
+
+
     public class CustomViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView2;
         ConstraintLayout itemback;

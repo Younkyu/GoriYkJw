@@ -259,6 +259,11 @@ public class TutorLoader {
                         datas.add(tut);
                     }
 
+                    MainActivity.datas2.addAll(datas);
+                    Log.e("Retrofit---------------", "adapternoti");
+                    MainActivity.rcanoti();
+
+
 //                    List<Main_list_item> data = response.body(); // 원래 반환값이 jsonString이 Data 클래스로 변환되어 리턴된다.
 //                    Log.e("Retrofit---------------",response.body().toString());
 //                    for(Main_list_item tt : data) {

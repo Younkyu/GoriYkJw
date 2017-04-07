@@ -3,9 +3,13 @@ package goriproject.ykjw.com.myapplication;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -48,8 +52,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int category_menu_count = 0;
     ImageButton img,img2;
     ImageView mainimg;
-    List<tutor> datas2;
-    MainListAdapter rca;
+    static List<tutor> datas2 = new ArrayList<>();
+    static MainListAdapter rca;
     EditText editText;
     RecyclerView rv;
     ConstraintLayout location_menu, category_menu;
@@ -105,8 +109,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         location_menu = (ConstraintLayout)findViewById(R.id.location_menu);
         category_menu = (ConstraintLayout)findViewById(R.id.category_menu);
         editText = (EditText)findViewById(R.id.editText);
-        datas2 = new ArrayList<>();
-
 
         editText.addTextChangedListener(this);
 
@@ -119,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //3. 리사이클러 뷰에 아답터 세팅하기
         rv.setAdapter(rca);
 
+
         //4. 리사이클러 뷰 매니저 등록하기(뷰의 모양을 결정 : 그리드, 일반리스트, 비대칭그리드)
         rv.setLayoutManager(new LinearLayoutManager(this));
 
@@ -129,15 +132,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Glide.with(this).load(R.drawable.main_image).thumbnail(0.1f).into(mainimg);
 
         button_connect();
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        if(datas2.size()!=0) {
-            rca.notifyDataSetChanged();
-        }
 
     }
 
@@ -635,5 +629,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
+
+    public static void rcanoti() {
+        rca.notifyDataSetChanged();
+    }
+
 
 }
