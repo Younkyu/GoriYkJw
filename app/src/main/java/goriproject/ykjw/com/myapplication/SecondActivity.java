@@ -36,6 +36,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.share.model.ShareLinkContent;
@@ -46,6 +47,7 @@ import goriproject.ykjw.com.myapplication.Custom.CustomPager;
 import goriproject.ykjw.com.myapplication.Custom.CustomScrollView;
 import goriproject.ykjw.com.myapplication.Custom.RadiusImageView;
 import goriproject.ykjw.com.myapplication.Custom.RectangleView;
+import goriproject.ykjw.com.myapplication.domain.Main_list_item;
 
 import static goriproject.ykjw.com.myapplication.Statics.useremail;
 import static goriproject.ykjw.com.myapplication.Statics.userid;
@@ -119,10 +121,12 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
         Intent intent = getIntent();
         final int id = intent.getExtras().getInt("id");
+        Main_list_item item = (Main_list_item)intent.getSerializableExtra("item");
 
         for(Talent data : TalentLoader.talent_datas) {
             if(data.getTalent_id() == id) {
                 talent = data;
+                Log.e("dddddddddddddddddd", talent.getTalent_name());
                 break;
             }
         }
@@ -156,7 +160,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         // 텍스트뷰
         subTitle = (TextView)findViewById(R.id.subTitle);
         txtTitle = (TextView)findViewById(R.id.txt_second_Title);
-
 
         // 프래그먼트 초기화
         one = new Second_OneFragment();
@@ -222,8 +225,10 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
         rating_second = (RatingBar)findViewById(R.id.rating_second);
         TextView tv_second_new = (TextView)findViewById(R.id.tv_second_new);
-        if(talent.getNumoftuty() != 0) {
-            rating_second.setRating(talent.getTalent__rating()/20);
+        if(Integer.parseInt(item.getReview_count().trim()) != 0) {
+            long ratinglong = Math.round(Double.parseDouble(item.getAverage_rate()));
+            int rating = (int)ratinglong;
+            rating_second.setRating(rating);
             //레이팅바의 색깔을 바꿔야 할 경우에 사용
             LayerDrawable stars = (LayerDrawable) rating_second.getProgressDrawable();
             stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
@@ -232,6 +237,8 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             rating_second.setVisibility(View.GONE);
         }
 
+        ImageView iv_second_profile = (ImageView)findViewById(R.id.iv_second_profile);
+        ImageView iv_second_cover = (ImageView)findViewById(R.id.iv_second_cover);
         Button btn_second_numoftuty = (Button)findViewById(R.id.btn_second_numoftuty);
         TextView txt_name = (TextView)findViewById(R.id.txt_second_name);
         TextView txt_title = (TextView)findViewById(R.id.txt_second_Title);
@@ -239,16 +246,31 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         TextView tv_price = (TextView)findViewById(R.id.tv_second_timeper);
         TextView tv_maxman = (TextView)findViewById(R.id.tv_second_maxman);
         TextView tv_schedule = (TextView)findViewById(R.id.tv_second_schedule);
-        txt_name.setText(talent.getTutor_name());
-        txt_title.setText(talent.getTalent_name());
-        tv_location.setText(talent.getTalent_location().get(1));
-        tv_price.setText(talent.getTimeperlesson());
-        tv_maxman.setText(talent.getMaxman());
-        tv_schedule.setText(talent.getTalent_price()+"/회");
-        btn_second_numoftuty.setText("누적참여자"+talent.getNumoftuty()+"명");
+        txt_name.setText(item.getTutor().getName()+"/"+item.getTutor().getNickname());
+        txt_title.setText(item.getTitle());
+        if(item.getRegions() != null) {
+            String location = "";
+            for(String i : item.getRegions()) {
+                location = location + ", " + i;
+            }
+            if(location.length() > 2) {
+                location = location.substring(2,location.length());
+                tv_location.setText(location);
+            } else {
+                tv_location.setText("없음");
+            }
+        } else {
+
+        }
+
+        Glide.with(this).load(item.getCover_image()).thumbnail(0.1f).into(iv_second_cover);
+        Glide.with(this).load(item.getTutor().getProfile_image()).into(iv_second_profile);
+
+        tv_price.setText(item.getPrice_per_hour()+"원");
+        tv_maxman.setText("최대"+item.getNumber_of_class()+"명");
+        tv_schedule.setText(item.getHours_per_class()+"시간/회");
+        btn_second_numoftuty.setText("누적참여자"+item.getReview_count()+"명");
     }
-
-
 
     // 위시리스트 결과를 보여주는 대화상자
     public void showMessage(boolean isChecked){
@@ -382,8 +404,5 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         ShareDialog shareDialog = new ShareDialog(this);
         shareDialog.show(content, ShareDialog.Mode.FEED);   //AUTOMATIC, FEED, NATIVE, WEB 등이 있으며 이는 다이얼로그 형식을 말합니다.
     }
-
-
-
 
 }

@@ -84,7 +84,7 @@
                     android:layout_height="230dp">
 
                     <ImageView
-                        android:id="@+id/imageView1"
+                        android:id="@+id/iv_second_cover"
                         android:layout_width="0dp"
                         android:layout_height="180dp"
                         android:layout_marginLeft="0dp"
@@ -93,21 +93,19 @@
                         android:scaleType="fitXY"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/list_dummy" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <goriproject.ykjw.com.myapplication.Custom.CircleImageView
-                        android:id="@+id/imageView2"
+                        android:id="@+id/iv_second_profile"
                         android:layout_width="80dp"
                         android:layout_height="70dp"
                         android:layout_gravity="center_horizontal"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/test2"
                         android:transformPivotY="-20dp"
                         android:layout_marginRight="0dp"
-                        app:layout_constraintRight_toRightOf="@+id/imageView1"
+                        app:layout_constraintRight_toRightOf="@+id/iv_second_cover"
                         android:layout_marginLeft="0dp"
-                        app:layout_constraintLeft_toLeftOf="@+id/imageView1"
+                        app:layout_constraintLeft_toLeftOf="@+id/iv_second_cover"
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:layout_marginBottom="0dp" />
 
@@ -246,7 +244,7 @@
                         android:layout_marginBottom="24dp" />
 
                     <TextView
-                        android:id="@+id/tv_second_location"
+                        android:id="@+id/tv_second_maxman"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="32dp"
@@ -260,7 +258,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/img_second_maxman" />
 
                     <TextView
-                        android:id="@+id/tv_second_maxman"
+                        android:id="@+id/tv_second_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="32dp"
