@@ -4,6 +4,8 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import goriproject.ykjw.com.myapplication.Interfaces.Main_List_Interface;
@@ -175,6 +177,8 @@ public class TutorLoader {
                     datas = response.body();
                     Log.e("Retrofit---------------", String.valueOf(datas.size()));
 
+                    sortTop(datas);
+
                     Statics.maxsize = datas.size();
 
                     if(MainActivity.datas2.size() == 0) {
@@ -183,7 +187,6 @@ public class TutorLoader {
 
                     Log.e("Retrofit---------------", "adapternoti");
                     MainActivity.rcanoti();
-
 
 //                    List<Main_list_item> data = response.body(); // 원래 반환값이 jsonString이 Data 클래스로 변환되어 리턴된다.
 //                    Log.e("Retrofit---------------",response.body().toString());
@@ -209,6 +212,27 @@ public class TutorLoader {
             }
         });
 
+    }
+
+    // 단순한 String,int리스트가 아닌 객체에 대한 정렬을 해야할 경우에 사용
+    public static void sortTop(List<Main_list_item> datas) {
+        Collections.sort(datas, new Comparator() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                //사용하려는 객체로 파싱해줌
+                Main_list_item no1 = (Main_list_item)o1;
+                Main_list_item no2 = (Main_list_item)o2;
+
+                //-1과 1의 위치를 조정하면 오름차순/내림차순을 조절할 수 있다.
+                if(Integer.parseInt(no1.getAverage_rate().trim()) >Integer.parseInt(no2.getAverage_rate().trim())) {
+                    return -1;
+                } else if (Integer.parseInt(no1.getAverage_rate().trim()) == Integer.parseInt(no2.getAverage_rate().trim())){
+                    return 0;
+                } else {
+                    return 1;
+                }
+            }
+        });
     }
 
 

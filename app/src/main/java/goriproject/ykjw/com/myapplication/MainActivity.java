@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if(datas2.size() == 0) {
             TutorLoader.loadData();
-            sortTop(datas);
             //Toast.makeText(this, TutorLoader.datasRealy.size(), Toast.LENGTH_SHORT).show();
 
         }
@@ -301,219 +300,225 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (v.getId()) {
             case R.id.btn_campus_all :
-                keword = "";
-                location_search(keword);
+                tv_location.setText("전체 지역");
+                button_search(1);
                 break;
             case R.id.btn_campus_seoul :
-                keword = "서울대";
-                location_search(keword);
+                tv_location.setText("서울대");
+                button_search(1);
                 break;
             case R.id.btn_campus_hongik :
-                keword = "홍익대";
-                location_search(keword);
+                tv_location.setText("홍익대");
+                button_search(1);
                 break;
             case R.id.btn_campus_yeonse :
-                keword = "연세대";
-                location_search(keword);
+                tv_location.setText("연세대");
+                button_search(1);
                 break;
             case R.id.btn_campus_korea :
-                keword = "고려대";
-                location_search(keword);
+                tv_location.setText("고려대");
+                button_search(1);
                 break;
             case R.id.btn_campus_hanyang :
-                keword = "한양대";
-                location_search(keword);
+                tv_location.setText("한양대");
+                button_search(1);
                 break;
             case R.id.btn_campus_jungang :
-                keword = "중앙대";
-                location_search(keword);
+                tv_location.setText("중앙대");
+                button_search(1);
                 break;
             case R.id.btn_campus_ihwa :
-                keword = "이화여대";
-                location_search(keword);
+                tv_location.setText("이화여대");
+                button_search(1);
                 break;
             case R.id.btn_campus_kunkuk :
-                keword = "건국대";
-                location_search(keword);
+                tv_location.setText("건국대");
+                button_search(1);
                 break;
             case R.id.btn_campus_busan :
-                keword = "부산대";
-                location_search(keword);
+                tv_location.setText("부산대");
+                button_search(1);
                 break;
             case R.id.btn_campus_others :
-                keword = "학교기타";
-                location_search(keword);
+                tv_location.setText("기타");
+                button_search(1);
                 break;
             case R.id.btn_location_all :
-                keword = "";
-                location_search(keword);
+                tv_location.setText("전체 지역");
+                button_search(1);
                 break;
             case R.id.btn_location_jamsil :
-                keword = "잠실";
-                location_search(keword);
+                tv_location.setText("잠실");
+                button_search(1);
                 break;
             case R.id.btn_location_gangnam :
-                keword = "강남";
-                location_search(keword);
+                tv_location.setText("강남");
+                button_search(1);
                 break;
             case R.id.btn_location_sinchon :
-                keword = "신촌";
-                location_search(keword);
+                tv_location.setText("신촌");
+                button_search(1);
                 break;
             case R.id.btn_location_hehwa :
-                keword = "혜화";
-                location_search(keword);
+                tv_location.setText("혜화");
+                button_search(1);
                 break;
             case R.id.btn_location_hapjung :
-                keword = "합정";
-                location_search(keword);
+                tv_location.setText("합정");
+                button_search(1);
                 break;
             case R.id.btn_location_youngsan :
-                keword = "용산";
-                location_search(keword);
+                tv_location.setText("용산");
+                button_search(1);
                 break;
             case R.id.btn_location_jongro :
-                keword = "종로";
-                location_search(keword);
+                tv_location.setText("종로");
+                button_search(1);
                 break;
             case R.id.btn_location_mokdong :
-                keword = "목동";
-                location_search(keword);
+                tv_location.setText("목동");
+                button_search(1);
                 break;
             case R.id.btn_location_sadang :
-                keword = "사당";
-                location_search(keword);
+                tv_location.setText("사당");
+                button_search(1);
                 break;
             case R.id.btn_location_other :
-                keword = "지역기타";
-                location_search(keword);
+                tv_location.setText("기타");
+                button_search(1);
                 break;
             case R.id.btn_category_all :
-                keword = "";
-                category_search(keword);
+                tv_category.setText("전체 카테고리");
+                button_search(2);
                 break;
             case R.id.btn_category_music :
-                keword = "음악/미술";
-                category_search(keword);
+                tv_category.setText("음악/미술");
+                button_search(2);
                 break;
             case R.id.btn_category_major :
-                keword = "전공/취업";
-                category_search(keword);
+                tv_category.setText("전공/취업");
+                button_search(2);
                 break;
             case R.id.btn_category_sports :
-                keword = "스포츠";
-                category_search(keword);
+                tv_category.setText("스포츠");
+                button_search(2);
                 break;
             case R.id.btn_category_language :
-                keword = "외국어";
-                category_search(keword);
+                tv_category.setText("외국어");
+                button_search(2);
                 break;
             case R.id.btn_category_computer :
-                keword = "컴퓨터";
-                category_search(keword);
+                tv_category.setText("컴퓨터");
+                button_search(2);
                 break;
             case R.id.btn_category_helth :
-                keword = "헬스/뷰티";
-                category_search(keword);
+                tv_category.setText("헬스/뷰티");
+                button_search(2);
                 break;
             case R.id.btn_category_other :
-                keword = "카테고리기타";
-                category_search(keword);
+                tv_category.setText("이색취미");
+                button_search(2);
                 break;
         }
     }
 
 
+    public void button_search(int searchtype) {
 
-    public void location_search(String keword) {
         datas2.clear();
-        String location,category;
-        location = keword;
 
-        if(!tv_category.getText().toString().equals("전체 카테고리")) {
-            category = tv_category.getText().toString();
-        }else {
+        String location, category;
+
+        location = tv_location.getText().toString();
+        category = tv_category.getText().toString();
+        if(tv_location.getText().toString().equals("전체 지역")) {
+            location = "";
+        }
+        if(tv_category.getText().toString().equals("전체 카테고리")) {
             category = "";
         }
 
-        for (Main_list_item item : datas) {
-                for(String tt : item.getRegions()) {
-                    if(tt.contains(location)) {
-                        if(item.getCategory().contains(category)) {
-                            datas2.add(item);
+
+        if(!location.equals("") ||  !category.equals("")) {
+            List<Main_list_item> temp = new ArrayList<>();
+
+            for (Main_list_item temp2 : datas) {
+                if (temp2.getRegions().size() != 0) {
+                    for (String temp3 : temp2.getRegions()) {
+                        if (temp3.contains(location)) {
+                            temp.add(temp2);
                             break;
                         }
                     }
                 }
             }
 
-        if(datas2.size() == 0) {
-            Toast.makeText(MainActivity.this, "아직 조건에 맞는 클래스가 없습니다.", Toast.LENGTH_LONG).show();
-            location_menu.setVisibility(View.GONE);
-            category_menu.setVisibility(View.GONE);
-            img.setImageResource(R.drawable.arrow_down);
-            location_menu_count++;
-            datas2.addAll(datas);
-        } else {
-            Toast.makeText(MainActivity.this, "조건에 맞는 강의는 " + datas2.size() +"개입니다.", Toast.LENGTH_LONG).show();
-            location_menu.setVisibility(View.GONE);
-            category_menu.setVisibility(View.GONE);
-            if(keword.equals("")) {
-                tv_location.setText("전체 지역");
-            }else {
-                tv_location.setText(keword);
-            }
-            img.setImageResource(R.drawable.arrow_down);
-            location_menu_count++;
-        }
-        rca.notifyDataSetChanged();
-    }
 
-    public void category_search(String keword) {
-        datas2.clear();
 
-        String location,category;
-
-        if(!tv_location.getText().toString().equals("전체 지역")) {
-            location = tv_location.getText().toString();
-        }else {
-            location = "";
-        }
-
-        category = keword;
-
-        for (Main_list_item item : datas) {
-                for(String tt : item.getRegions()) {
-                    if(tt.contains(location)) {
-                        if(item.getCategory().contains(category)) {
-                                datas2.add(item);
-                        }
-                    }
+            for (Main_list_item it : temp) {
+                if (it.getCategory().contains(category)) {
+                    datas2.add(it);
                 }
             }
 
-        if(datas2.size() == 0) {
-            Toast.makeText(MainActivity.this, "아직 조건에 맞는 클래스가 없습니다.", Toast.LENGTH_LONG).show();
-            location_menu.setVisibility(View.GONE);
-            category_menu.setVisibility(View.GONE);
-            img2.setImageResource(R.drawable.arrow_down);
-            category_menu_count++;
-            datas2.addAll(datas);
-        } else {
-            Toast.makeText(MainActivity.this, "조건에 맞는 강의는 " + datas2.size() +"개입니다.", Toast.LENGTH_LONG).show();
-            location_menu.setVisibility(View.GONE);
-            category_menu.setVisibility(View.GONE);
-            if(keword.equals("")) {
-                tv_category.setText("전체 카테고리");
-            }else {
-                tv_category.setText(keword);
-            }
-            img2.setImageResource(R.drawable.arrow_down);
-            category_menu_count++;
-        }
-        rca.notifyDataSetChanged();
-    }
+            temp.clear();
 
+            if(searchtype == 1) {
+                if(datas2.size() == 0) {
+                    Toast.makeText(MainActivity.this, "아직 조건에 맞는 클래스가 없습니다.", Toast.LENGTH_LONG).show();
+                    location_menu.setVisibility(View.GONE);
+                    category_menu.setVisibility(View.GONE);
+                    tv_location.setText("전체 지역");
+                    img.setImageResource(R.drawable.arrow_down);
+                    location_menu_count++;
+                    datas2.addAll(datas);
+                } else {
+                    Toast.makeText(MainActivity.this, "조건에 맞는 강의는 " + datas2.size() +"개입니다.", Toast.LENGTH_LONG).show();
+                    location_menu.setVisibility(View.GONE);
+                    category_menu.setVisibility(View.GONE);
+                    img.setImageResource(R.drawable.arrow_down);
+                    location_menu_count++;
+                }
+            } else if (searchtype == 2) {
+                if(datas2.size() == 0) {
+                    Toast.makeText(MainActivity.this, "아직 조건에 맞는 클래스가 없습니다.", Toast.LENGTH_LONG).show();
+                    location_menu.setVisibility(View.GONE);
+                    category_menu.setVisibility(View.GONE);
+                    tv_category.setText("전체 카테고리");
+                    img2.setImageResource(R.drawable.arrow_down);
+                    category_menu_count++;
+                    datas2.addAll(datas);
+                } else {
+                    Toast.makeText(MainActivity.this, "조건에 맞는 강의는 " + datas2.size() +"개입니다.", Toast.LENGTH_LONG).show();
+                    location_menu.setVisibility(View.GONE);
+                    category_menu.setVisibility(View.GONE);
+                    img2.setImageResource(R.drawable.arrow_down);
+                    category_menu_count++;
+                }
+            }
+
+        } else {
+            if(searchtype == 1) {
+                    Toast.makeText(MainActivity.this, "전체 목록입니다.", Toast.LENGTH_LONG).show();
+                    location_menu.setVisibility(View.GONE);
+                    category_menu.setVisibility(View.GONE);
+                    img.setImageResource(R.drawable.arrow_down);
+                    location_menu_count++;
+                    datas2.addAll(datas);
+
+            } else if (searchtype == 2) {
+                    Toast.makeText(MainActivity.this, "전체 목록입니다.", Toast.LENGTH_LONG).show();
+                    location_menu.setVisibility(View.GONE);
+                    category_menu.setVisibility(View.GONE);
+                    img2.setImageResource(R.drawable.arrow_down);
+                    category_menu_count++;
+                    datas2.addAll(datas);
+            }
+        }
+
+        rca.notifyDataSetChanged();
+
+    }
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -534,62 +539,58 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void text_search(String searchText) {
         datas2.clear();
 
-        String location,category;
+        String location, category;
+        List<Main_list_item> temp4 = new ArrayList<>();
 
-        if(!tv_location.getText().toString().equals("전체 지역")) {
-            location = tv_location.getText().toString();
-        }else {
+        location = tv_location.getText().toString();
+        category = tv_category.getText().toString();
+        if(tv_location.getText().toString().equals("전체 지역")) {
             location = "";
         }
-
-        if(!tv_category.getText().toString().equals("전체 카테고리")) {
-            category = tv_category.getText().toString();
-        }else {
+        if(tv_category.getText().toString().equals("전체 카테고리")) {
             category = "";
         }
 
-        if (searchText.length() == 0) {
-            datas2.addAll(datas);
-        } else {
-            for (Main_list_item item : datas) {
-                for(String tt : item.getRegions()) {
-                    if(tt.contains(location)) {
-                        if(item.getCategory().contains(category)) {
-                            if (item.getTitle().contains(searchText)) {
-                                datas2.add(item);
-                            } else if (item.getTutor().getName().contains(searchText)) {
-                                datas2.add(item);
-                            }
+
+        if(!location.equals("") ||  !category.equals("")) {
+            List<Main_list_item> temp = new ArrayList<>();
+
+            for (Main_list_item temp2 : datas) {
+                if (temp2.getRegions().size() != 0) {
+                    for (String temp3 : temp2.getRegions()) {
+                        if (temp3.contains(location)) {
+                            temp.add(temp2);
+                            break;
                         }
                     }
                 }
             }
+            for (Main_list_item it : temp) {
+                if (it.getCategory().contains(category)) {
+                    temp4.add(it);
+                }
+            }
+            temp.clear();
+        } else {
+            temp4.addAll(datas);
         }
+
+        for(Main_list_item temp5 : temp4) {
+            if(temp5.getTitle().contains(searchText)) {
+                datas2.add(temp5);
+            } else if(temp5.getTutor().getName().contains(searchText)) {
+                datas2.add(temp5);
+            }
+        }
+
+        temp4.clear();
+
         rca.notifyDataSetChanged();
     }
 
 
     // 여기는 소트 부분인데 지금은 나중에 rating이 들어오면 수정할 예정
-    // 단순한 String,int리스트가 아닌 객체에 대한 정렬을 해야할 경우에 사용
-    public void sortTop(List<Main_list_item> datas2) {
-        Collections.sort(datas2, new Comparator() {
-            @Override
-            public int compare(Object o1, Object o2) {
-                //사용하려는 객체로 파싱해줌
-                Main_list_item no1 = (Main_list_item)o1;
-                Main_list_item no2 = (Main_list_item)o2;
 
-                //-1과 1의 위치를 조정하면 오름차순/내림차순을 조절할 수 있다.
-                if(Integer.parseInt(no1.getAverage_rate().trim()) >Integer.parseInt(no2.getAverage_rate().trim())) {
-                    return -1;
-                } else if (Integer.parseInt(no1.getAverage_rate().trim()) == Integer.parseInt(no2.getAverage_rate().trim())){
-                    return 0;
-                } else {
-                    return 1;
-                }
-            }
-        });
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
