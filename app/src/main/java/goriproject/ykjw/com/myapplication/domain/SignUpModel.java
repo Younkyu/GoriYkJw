@@ -10,15 +10,6 @@ public class SignUpModel {
     private String password1;
     private String password2;
     private String name;
-    private String email;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getUsername() {
         return username;

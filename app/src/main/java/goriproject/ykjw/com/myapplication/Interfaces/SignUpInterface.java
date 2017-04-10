@@ -15,17 +15,17 @@ import retrofit2.http.POST;
 
 public interface SignUpInterface {
 
-    @Headers("Content-Type:application/json")
-    @POST("member/signup")
+    //@Headers("Content-Type:application/json")
+    @POST("member/signup/")
     Call<ResponseBody> createUser(
             @Body SignUpModel model
     );
 
     @FormUrlEncoded
-    @POST("member/signup")
-    public void signup(@Field("username") String username, @Field("password1") String password1, @Field("password2") String password2,
-                       @Field("name") String name, Callback<JSONObject> callback);
+    @POST("member/login/")
+    Call<Result2> login(@Field("username") String username, @Field("password") String password);
 
-    @POST("member/login")
-    Call<Result> login(@Field("name") String username, @Field("password") String password);
+    @FormUrlEncoded
+    @POST("member/token-auth/")
+    Call<Result> facebooklogin(@Field("access_token") String token);
 }

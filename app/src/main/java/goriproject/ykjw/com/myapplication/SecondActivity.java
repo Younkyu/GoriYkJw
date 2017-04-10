@@ -3,6 +3,7 @@ package goriproject.ykjw.com.myapplication;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
@@ -49,9 +50,9 @@ import goriproject.ykjw.com.myapplication.Custom.RadiusImageView;
 import goriproject.ykjw.com.myapplication.Custom.RectangleView;
 import goriproject.ykjw.com.myapplication.domain.Main_list_item;
 
-import static goriproject.ykjw.com.myapplication.Statics.useremail;
-import static goriproject.ykjw.com.myapplication.Statics.userid;
-import static goriproject.ykjw.com.myapplication.Statics.username;
+import static goriproject.ykjw.com.myapplication.Statics.is_signin;
+import static goriproject.ykjw.com.myapplication.Statics.key;
+
 
 public class SecondActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -81,7 +82,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     NavigationView navigationView;
 
     Talent talent;
-
+    Main_list_item item;
     float txtTitle_y_position = 0;
     float tab_y_position = 0;
 
@@ -100,7 +101,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     protected void onResume() {
         super.onResume();
 
-        if(userid != null) {
+        if(is_signin) {
             navigationView = (NavigationView) findViewById(R.id.nav_view);
             // get menu from navigationView
             Menu menu = navigationView.getMenu();
@@ -121,7 +122,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
         Intent intent = getIntent();
         final int id = intent.getExtras().getInt("id");
-        Main_list_item item = (Main_list_item)intent.getSerializableExtra("item");
+        item = (Main_list_item)intent.getSerializableExtra("item");
 
         for(Talent data : TalentLoader.talent_datas) {
             if(data.getTalent_id() == id) {
@@ -302,12 +303,15 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         if (id == R.id.menu_introduce_gori) {
             //TODO 고리소개 페이지로드
         } else if (id == R.id.menu_signinout) {
-            if(userid != null) {
-                userid = null;
-                username = null;
-                useremail = null;
-                item.setTitle("로그인");
-                Toast.makeText(SecondActivity.this, "정상적으로 로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+            if(is_signin) {
+                    key = null;
+                    is_signin = false;
+                    item.setTitle("로그인");
+                    SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putString("autologin", null);
+                    editor.commit();
+                    Toast.makeText(SecondActivity.this, "정상적으로 로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
             }else {
                 Intent intent = new Intent(SecondActivity.this, SignInActivity.class);
                 startActivity(intent);
@@ -391,13 +395,13 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     {
         ShareLinkContent content = new ShareLinkContent.Builder()
                 //링크의 콘텐츠 제목
-                .setContentTitle("페이스북 공유 링크입니다.")
+                .setContentTitle(item.getTitle())
 
                 //게시물에 표시될 썸네일 이미지의 URL
-                .setImageUrl(Uri.parse("https://lh3.googleusercontent.com/hmVeH1KmKDy1ozUlrjtYMHpzSDrBv9NSbZ0DPLzR8HdBip9kx3wn_sXmHr3wepCHXA=rw"))
+                .setImageUrl(Uri.parse(item.getCover_image()))
 
                 //공유될 링크
-                .setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.handykim.nbit.everytimerfree"))
+                .setContentUrl(Uri.parse(item.getCover_image()))
 
                 //게일반적으로 2~4개의 문장으로 구성된 콘텐츠 설명
                 .setContentDescription("문장1, 문장2, 문장3, 문장4")

@@ -5,4 +5,12 @@ package goriproject.ykjw.com.myapplication.Interfaces;
  */
 
 public class Result {
+    String token;
+    public String getToken(){
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

@@ -12,7 +12,7 @@ import android.view.ViewGroup;
  * A simple {@link Fragment} subclass.
  */
 public class Second_FourFragment extends Fragment {
-
+    View view;
     private Talent talent;
     public Second_FourFragment() {
         // Required empty public constructor
@@ -27,7 +27,13 @@ public class Second_FourFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_second_four, container, false);
+        if(view != null) {
+            return view;
+        }
+
+        view = inflater.inflate(R.layout.fragment_second_four, container, false);
+
+        return view;
     }
 
 }
