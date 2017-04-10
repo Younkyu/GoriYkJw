@@ -25,6 +25,11 @@ import org.json.JSONObject;
 import java.util.Arrays;
 
 import goriproject.ykjw.com.myapplication.Interfaces.SignUpInterface;
+import goriproject.ykjw.com.myapplication.domain.SignUpModel;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -56,8 +61,39 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        SignUpInterface signUpInterface = retrofit.create(SignUpInterface.class);
+        SignUpInterface service = retrofit.create(SignUpInterface.class);
 
+        SignUpModel model = new SignUpModel();
+        model.setName("이윤규");
+        model.setPassword1("chlghlals");
+        model.setPassword2("chlghlals");
+        model.setUsername("gtv15234@hanmail.net");
+        model.setEmail("gtv1523411@gmail.com");
+
+        Call<ResponseBody> remoteData = service.createUser(model);
+
+        remoteData.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.e("create user response", response.toString());
+                try {
+                    ResponseBody rsp = response.body();
+                    Log.e(response.code() + "", "eee");
+                    if(response.code()==201) {
+                        Log.e("create user response", "SignUp 성공");
+                    } else {
+                     Log.e(String.valueOf(response.code()), String.valueOf(response.body()));
+                    }
+                } catch(Exception e) {
+                    Log.e("SignUp Error", "SignUp Error Occured!!!!");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
 
 
     }

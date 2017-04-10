@@ -216,6 +216,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@drawable/custom_signup_button"
+        android:onClick="emailsignup"
         android:text="이메일아이디로 가입하기"
         android:textColor="@android:color/background_light"
         android:textSize="18sp"
