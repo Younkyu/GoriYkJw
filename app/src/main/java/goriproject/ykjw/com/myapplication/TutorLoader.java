@@ -177,7 +177,7 @@ public class TutorLoader {
                     datas = response.body();
                     Log.e("Retrofit---------------", String.valueOf(datas.size()));
 
-                    sortTop(datas);
+                    //sortTop(datas);
 
                     Statics.maxsize = datas.size();
 

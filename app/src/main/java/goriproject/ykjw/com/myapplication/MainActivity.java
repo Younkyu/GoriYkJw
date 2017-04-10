@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_Sign_inout) {
-            drawer.openDrawer(GravityCompat.END);
+            drawer.openDrawer(GravityCompat.START);
             return true;
         }
 
@@ -617,12 +617,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         } else if (id == R.id.menu_mypage) {
             //TODO 마이페이지 고
+            intent = new Intent(MainActivity.this, MyPageActivity.class);
+            startActivity(intent);
         } else if (id == R.id.menu_tutor_go) {
             // 아직 구현할 생각 없음
             Toast.makeText(MainActivity.this, "튜터등록은 웹사이트에서 해주세요!", Toast.LENGTH_LONG).show();
         }
 
-        drawer.closeDrawer(GravityCompat.END);
+        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

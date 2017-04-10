@@ -7,9 +7,6 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
-/**
- * Created by Younkyu on 2017-04-10.
- */
 
 public interface SignUpInterface {
 
