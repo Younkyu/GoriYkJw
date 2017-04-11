@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -16,20 +15,14 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.tsengvn.typekit.TypekitContextWrapper;
 
-import org.json.JSONObject;
-
 import java.util.Arrays;
 
-import goriproject.ykjw.com.myapplication.Interfaces.Result;
-import goriproject.ykjw.com.myapplication.Interfaces.Result2;
+import goriproject.ykjw.com.myapplication.domain.Result;
 import goriproject.ykjw.com.myapplication.Interfaces.SignUpInterface;
-import goriproject.ykjw.com.myapplication.Util.EditUtil;
 import goriproject.ykjw.com.myapplication.Util.SignUtil;
 import goriproject.ykjw.com.myapplication.domain.SignUpModel;
 import okhttp3.ResponseBody;

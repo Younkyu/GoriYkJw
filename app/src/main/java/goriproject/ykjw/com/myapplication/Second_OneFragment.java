@@ -3,6 +3,8 @@ package goriproject.ykjw.com.myapplication;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +45,7 @@ public class Second_OneFragment extends Fragment implements YouTubePlayer.OnInit
     View view;
     private Talent talent;
     Main_list_item t1,t2,t3,t4;
+    Main_list_item item;
 
     SecondActivity activity;
 
@@ -52,16 +56,72 @@ public class Second_OneFragment extends Fragment implements YouTubePlayer.OnInit
     public Second_OneFragment() {
         // Required empty public constructor
     }
-    public void setTalent(Talent talenta) {
+    public void setTalent(Talent talenta, Main_list_item item) {
         // Required empty public constructor
         talent = talenta;
+        this.item = item;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        if(view != null) {
+            return view;
+        }
+
         view = inflater.inflate(R.layout.fragment_second_one, container, false);
+
+        RatingBar rating_second;
+        // 맨위 요약 사진
+        rating_second = (RatingBar)view.findViewById(R.id.rating_second);
+        TextView tv_second_new = (TextView)view.findViewById(R.id.tv_second_new);
+        if(Integer.parseInt(item.getReview_count().trim()) != 0) {
+            long ratinglong = Math.round(Double.parseDouble(item.getAverage_rate()));
+            int rating = (int)ratinglong;
+            rating_second.setRating(rating);
+            //레이팅바의 색깔을 바꿔야 할 경우에 사용
+            LayerDrawable stars = (LayerDrawable) rating_second.getProgressDrawable();
+            stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
+            tv_second_new.setVisibility(View.GONE);
+        } else {
+            rating_second.setVisibility(View.GONE);
+        }
+
+        ImageView iv_second_profile = (ImageView)view.findViewById(R.id.iv_second_profile);
+        ImageView iv_second_cover = (ImageView)view.findViewById(R.id.iv_second_cover);
+        Button btn_second_numoftuty = (Button)view.findViewById(R.id.btn_second_numoftuty);
+        TextView txt_name = (TextView)view.findViewById(R.id.txt_second_name);
+        TextView txt_title = (TextView)view.findViewById(R.id.txt_second_Title);
+        TextView tv_location = (TextView)view.findViewById(R.id.tv_second_location);
+        TextView tv_price = (TextView)view.findViewById(R.id.tv_second_timeper);
+        TextView tv_maxman = (TextView)view.findViewById(R.id.tv_second_maxman);
+        TextView tv_schedule = (TextView)view.findViewById(R.id.tv_second_schedule);
+        txt_name.setText(item.getTutor().getName()+"/"+item.getTutor().getNickname());
+        txt_title.setText(item.getTitle());
+        if(item.getRegions() != null) {
+            String location = "";
+            for(String i : item.getRegions()) {
+                location = location + ", " + i;
+            }
+            if(location.length() > 2) {
+                location = location.substring(2,location.length());
+                tv_location.setText(location);
+            } else {
+                tv_location.setText("없음");
+            }
+        } else {
+
+        }
+
+        Glide.with(this).load(item.getCover_image()).thumbnail(0.1f).into(iv_second_cover);
+        Glide.with(this).load(item.getTutor().getProfile_image()).into(iv_second_profile);
+
+        tv_price.setText(item.getPrice_per_hour()+"원");
+        tv_maxman.setText("최대"+item.getNumber_of_class()+"명");
+        tv_schedule.setText(item.getHours_per_class()+"시간/회");
+        btn_second_numoftuty.setText("누적참여자"+item.getReview_count()+"명");
+
 
         ll_one_curiculum = (LinearLayout)view.findViewById(R.id.ll_one_curiculum);
         for(int i = 0 ; i < 5 ; i ++) {

@@ -15,11 +15,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,7 +55,6 @@ import goriproject.ykjw.com.myapplication.domain.Main_list_item;
 import static goriproject.ykjw.com.myapplication.Statics.is_signin;
 import static goriproject.ykjw.com.myapplication.Statics.key;
 
-
 public class SecondActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "RAPSTAR";
@@ -82,10 +83,14 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     NavigationView navigationView;
 
     Talent talent;
-    Main_list_item item;
+
     float txtTitle_y_position = 0;
     float tab_y_position = 0;
 
+    private TabLayout mTabLayout;
+
+
+/*
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         txtTitle_y_position = txtTitle.getTop();
@@ -95,6 +100,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         scrollView.setTabForY(tab_y_position + 120);
         super.onWindowFocusChanged(hasFocus);
     }
+*/
 
 
     @Override
@@ -122,8 +128,54 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
         Intent intent = getIntent();
         final int id = intent.getExtras().getInt("id");
-        item = (Main_list_item)intent.getSerializableExtra("item");
+        Main_list_item item = (Main_list_item)intent.getSerializableExtra("item");
 
+        // 탭 레이아웃 & 뷰페이저 초기화
+        ViewPager viewPager_second_activity = (ViewPager)findViewById(R.id.viewPager_second_activity);
+        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
+        if(viewPager_second_activity != null) viewPager_second_activity.setAdapter(adapter);
+        mTabLayout = (TabLayout) findViewById(R.id.tab_second_activity);
+        mTabLayout.addTab(mTabLayout.newTab().setText("수업 소개"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("장소/시간"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("리뷰"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("문의"));
+
+        mTabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager_second_activity));
+        viewPager_second_activity.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+
+
+
+        //드로어레이아웃
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        navigationView  = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        // 프래그먼트 초기화
+        one = new Second_OneFragment();
+        two = new Second_TwoFragment();
+        three = new Second_ThreeFragment();
+        four = new Second_FourFragment();
+        one.setTalent(talent,item);
+        two.setTalent(talent,item);
+        three.setTalent(talent,item);
+        four.setTalent(talent,item);
+
+
+        // 버튼 초기화
+        Button btnApplySecondTemp = (Button)findViewById(R.id.btnApplySecondTemp);
+        btnApplySecondTemp.bringToFront();
+        btnApplySecondTemp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SecondActivity.this, ApplyActivity.class);
+
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
+
+        /*
         for(Talent data : TalentLoader.talent_datas) {
             if(data.getTalent_id() == id) {
                 talent = data;
@@ -143,11 +195,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         });
 
 
-        //드로어레이아웃
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        navigationView  = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
 
         // 체크 박스
         checkbox_wishList = (CheckBox)findViewById(R.id.checkbox_wishList);
@@ -162,16 +210,9 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         subTitle = (TextView)findViewById(R.id.subTitle);
         txtTitle = (TextView)findViewById(R.id.txt_second_Title);
 
-        // 프래그먼트 초기화
-        one = new Second_OneFragment();
-        two = new Second_TwoFragment();
-        three = new Second_ThreeFragment();
-        four = new Second_FourFragment();
-        one.setTalent(talent);
-        two.setTalent(talent);
-        three.setTalent(talent);
-        four.setTalent(talent);
-        one.setActivity(this);
+
+
+
 
         // 탭 레이아웃 & 뷰페이저 초기화
         final CustomPager viewPager = (CustomPager)findViewById(R.id.viewPager);
@@ -193,6 +234,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         subTab.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tab));
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(subTab));
+
 
 
 
@@ -271,6 +313,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         tv_maxman.setText("최대"+item.getNumber_of_class()+"명");
         tv_schedule.setText(item.getHours_per_class()+"시간/회");
         btn_second_numoftuty.setText("누적참여자"+item.getReview_count()+"명");
+        */
     }
 
     // 위시리스트 결과를 보여주는 대화상자
@@ -304,14 +347,14 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             //TODO 고리소개 페이지로드
         } else if (id == R.id.menu_signinout) {
             if(is_signin) {
-                    key = null;
-                    is_signin = false;
-                    item.setTitle("로그인");
-                    SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.putString("autologin", null);
-                    editor.commit();
-                    Toast.makeText(SecondActivity.this, "정상적으로 로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+                key = null;
+                is_signin = false;
+                item.setTitle("로그인");
+                SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString("autologin", null);
+                editor.commit();
+                Toast.makeText(SecondActivity.this, "정상적으로 로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
             }else {
                 Intent intent = new Intent(SecondActivity.this, SignInActivity.class);
                 startActivity(intent);
@@ -344,10 +387,12 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         final int PAGE_COUNT = 4;
         private int mCurrentPosition = -1;
 
+
         public PagerAdapter(FragmentManager fm) {
             super(fm);
 
         }
+
 
         @Override
         public Fragment getItem(int position) {
@@ -371,19 +416,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             return PAGE_COUNT;
         }
 
-        @Override
-        public void setPrimaryItem(ViewGroup container, int position, Object object) {
-            super.setPrimaryItem(container, position, object);
-            if (position != mCurrentPosition) {
-                Fragment fragment = (Fragment) object;
-                CustomPager pager = (CustomPager) container;
-                if (fragment != null && fragment.getView() != null) {
-                    mCurrentPosition = position;
-                    pager.measureCurrentView(fragment.getView());
-                }
-            }
-        }
-
     }
 
     @Override
@@ -395,13 +427,13 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     {
         ShareLinkContent content = new ShareLinkContent.Builder()
                 //링크의 콘텐츠 제목
-                .setContentTitle(item.getTitle())
+                .setContentTitle("페이스북 공유 링크입니다.")
 
                 //게시물에 표시될 썸네일 이미지의 URL
-                .setImageUrl(Uri.parse(item.getCover_image()))
+                .setImageUrl(Uri.parse("https://lh3.googleusercontent.com/hmVeH1KmKDy1ozUlrjtYMHpzSDrBv9NSbZ0DPLzR8HdBip9kx3wn_sXmHr3wepCHXA=rw"))
 
                 //공유될 링크
-                .setContentUrl(Uri.parse(item.getCover_image()))
+                .setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.handykim.nbit.everytimerfree"))
 
                 //게일반적으로 2~4개의 문장으로 구성된 콘텐츠 설명
                 .setContentDescription("문장1, 문장2, 문장3, 문장4")

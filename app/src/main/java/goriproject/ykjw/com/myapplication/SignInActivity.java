@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,18 +16,14 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.tsengvn.typekit.TypekitContextWrapper;
 
-import org.json.JSONObject;
-
 import java.util.Arrays;
 
-import goriproject.ykjw.com.myapplication.Interfaces.Result;
-import goriproject.ykjw.com.myapplication.Interfaces.Result2;
+import goriproject.ykjw.com.myapplication.domain.Result;
+import goriproject.ykjw.com.myapplication.domain.Result2;
 import goriproject.ykjw.com.myapplication.Interfaces.SignUpInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -96,7 +91,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     }
 
                     is_signin = true;
-                    // goriproject.ykjw.com.myapplication.Interfaces.Result@42ca77a0
+                    // goriproject.ykjw.com.myapplication.domain.Result@42ca77a0
                     finish();
                 } else {
                     Toast.makeText(SignInActivity.this, "아이디와 비밀번호를 확인해주세요", Toast.LENGTH_SHORT).show();

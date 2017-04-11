@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import goriproject.ykjw.com.myapplication.domain.Main_list_item;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,13 +24,15 @@ public class Second_TwoFragment extends Fragment {
     private Talent talent;
     int CHECKBOXCOUNT = 3;
     private View view;
+    Main_list_item item;
 
     public Second_TwoFragment() {
         // Required empty public constructor
     }
-    public void setTalent(Talent talenta) {
+    public void setTalent(Talent talenta, Main_list_item item) {
         // Required empty public constructor
         talent = talenta;
+        this.item = item;
     }
 
 
@@ -47,7 +51,7 @@ public class Second_TwoFragment extends Fragment {
 
     public void showLocationConfirm(){
         // 라디오 그룹 생성 (라디오 버튼이 들어갈 공간)
-        RadioGroup dynamic_radioarea_loc = (RadioGroup)view.findViewById(R.id.dynamic_radioarea_loc);
+        RadioGroup dynamic_radioarea_loc = (RadioGroup)view.findViewById(R.id.dynamic_radiogroup_loc);
         dynamic_radioarea_loc.setOrientation(RadioGroup.HORIZONTAL);
 
         // 패럼 생성 : 라디오 버튼
@@ -64,7 +68,7 @@ public class Second_TwoFragment extends Fragment {
 
 
         // 라디오 그룹 생성 (라디오 버튼이 들어갈 공간)
-        RadioGroup dynamic_radioarea_day = (RadioGroup)view.findViewById(R.id.dynamic_radioarea_day);
+        RadioGroup dynamic_radioarea_day = (RadioGroup)view.findViewById(R.id.dynamic_radiogroup_day);
         dynamic_radioarea_day.setOrientation(RadioGroup.HORIZONTAL);
 
         // 패럼 생성 : 라디오 버튼
