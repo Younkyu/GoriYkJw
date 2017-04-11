@@ -46,11 +46,20 @@ import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.tsengvn.typekit.TypekitContextWrapper;
 
+import java.io.IOException;
+
 import goriproject.ykjw.com.myapplication.Custom.CustomPager;
 import goriproject.ykjw.com.myapplication.Custom.CustomScrollView;
 import goriproject.ykjw.com.myapplication.Custom.RadiusImageView;
 import goriproject.ykjw.com.myapplication.Custom.RectangleView;
+import goriproject.ykjw.com.myapplication.Interfaces.Talent_Detail_Interface;
 import goriproject.ykjw.com.myapplication.domain.Main_list_item;
+import goriproject.ykjw.com.myapplication.domain.TalentDetail;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static goriproject.ykjw.com.myapplication.Statics.is_signin;
 import static goriproject.ykjw.com.myapplication.Statics.key;
@@ -83,7 +92,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     NavigationView navigationView;
 
     Talent talent;
-
+    TalentDetail td = new TalentDetail();
     float txtTitle_y_position = 0;
     float tab_y_position = 0;
 
@@ -116,6 +125,13 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             logoutitem.setTitle(R.string.logoutitem);
         }
 
+        Intent intent = getIntent();
+        final int id = intent.getExtras().getInt("id");
+        Main_list_item item = (Main_list_item)intent.getSerializableExtra("item");
+
+
+
+
     }
 
     @Override
@@ -129,6 +145,53 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         Intent intent = getIntent();
         final int id = intent.getExtras().getInt("id");
         Main_list_item item = (Main_list_item)intent.getSerializableExtra("item");
+
+        // 1. 레트로핏을 생성하고
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://mozzi.co.kr/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        Talent_Detail_Interface tdService = retrofit.create(Talent_Detail_Interface.class);
+
+        final Call<TalentDetail> tds = tdService.getTalentDetail(String.valueOf(id));
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    td = tds.execute().body();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+//        tds.enqueue(new Callback<TalentDetail>() {
+//            @Override
+//            public void onResponse(Call<TalentDetail> call, Response<TalentDetail> response) {
+//                td = response.body();
+//                Log.e("ddddddasdfa", String.valueOf(td.getCurriculums().size()));
+//                Log.e("ddddddasdfa", String.valueOf(td.getTitle()));
+//            }
+//
+//            @Override
+//            public void onFailure(Call<TalentDetail> call, Throwable t) {
+//
+//            }
+//        });
+
+
+
+        Log.e("sdfdfdfadfasd", String.valueOf(td.getTitle()));
+
 
         // 탭 레이아웃 & 뷰페이저 초기화
         ViewPager viewPager_second_activity = (ViewPager)findViewById(R.id.viewPager_second_activity);
@@ -145,6 +208,8 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
 
 
+
+
         //드로어레이아웃
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -156,10 +221,12 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         two = new Second_TwoFragment();
         three = new Second_ThreeFragment();
         four = new Second_FourFragment();
-        one.setTalent(talent,item);
+        Log.e("sdfdfdfadfasd2222", String.valueOf(td.getTitle()));
+        one.setTalent(talent,item, td);
         two.setTalent(talent,item);
         three.setTalent(talent,item);
         four.setTalent(talent,item);
+        one.setActivity(this);
 
 
         // 버튼 초기화
@@ -169,7 +236,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SecondActivity.this, ApplyActivity.class);
-
                 intent.putExtra("id", id);
                 startActivity(intent);
             }
