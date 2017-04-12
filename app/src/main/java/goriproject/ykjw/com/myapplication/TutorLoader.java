@@ -42,36 +42,51 @@ public class TutorLoader {
         // 3. 데이터를 가져온다.
         Call<List<Main_list_item>> result = service.getList();
 
-        // 4. 데이터를 가져오는 부분은 네트웍을 통해서 오기 때문에 비동기 처리된다.
-        result.enqueue(new Callback<List<Main_list_item>>() {
-            @Override
-            public void onResponse(Call<List<Main_list_item>> call, Response<List<Main_list_item>> response) {
-                if(response.isSuccessful()) {
-                    Log.e("Retrofit---------------",response.body().toString());
-                    datas = response.body();
-                    Log.e("Retrofit---------------", String.valueOf(datas.size()));
+        try {
+            datas = result.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-                    //sortTop(datas);
+        Statics.maxsize = datas.size();
 
-                    Statics.maxsize = datas.size();
+        if(MainActivity.datas2.size() == 0) {
+            MainActivity.datas2.addAll(datas);
+        }
 
-                    if(MainActivity.datas2.size() == 0) {
-                        MainActivity.datas2.addAll(datas);
-                    }
+        Log.e("Retrofit---------------", "adapternoti");
 
-                    Log.e("Retrofit---------------", "adapternoti");
-                    MainActivity.rcanoti();
 
-                } else {
-                    Log.e("Retrofit",response.message()); // 정상적이지 않을 경우 message에 오류내용이 담겨 온다.
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Main_list_item>> call, Throwable t) {
-
-            }
-        });
+//        // 4. 데이터를 가져오는 부분은 네트웍을 통해서 오기 때문에 비동기 처리된다.
+//        result.enqueue(new Callback<List<Main_list_item>>() {
+//            @Override
+//            public void onResponse(Call<List<Main_list_item>> call, Response<List<Main_list_item>> response) {
+//                if(response.isSuccessful()) {
+//                    Log.e("Retrofit---------------",response.body().toString());
+//                    datas = response.body();
+//                    Log.e("Retrofit---------------", String.valueOf(datas.size()));
+//
+//                    //sortTop(datas);
+//
+//                    Statics.maxsize = datas.size();
+//
+//                    if(MainActivity.datas2.size() == 0) {
+//                        MainActivity.datas2.addAll(datas);
+//                    }
+//
+//                    Log.e("Retrofit---------------", "adapternoti");
+//                    MainActivity.rcanoti();
+//
+//                } else {
+//                    Log.e("Retrofit",response.message()); // 정상적이지 않을 경우 message에 오류내용이 담겨 온다.
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Main_list_item>> call, Throwable t) {
+//
+//            }
+//        });
 
     }
 

@@ -1,12 +1,13 @@
 package goriproject.ykjw.com.myapplication.domain;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Younkyu on 2017-04-11.
  */
 
-public class TalentDetail
+public class TalentDetail implements Serializable
 {
     private String cover_image;
 

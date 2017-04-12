@@ -125,11 +125,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             logoutitem.setTitle(R.string.logoutitem);
         }
 
-        Intent intent = getIntent();
-        final int id = intent.getExtras().getInt("id");
-        Main_list_item item = (Main_list_item)intent.getSerializableExtra("item");
-
-
 
 
     }
@@ -145,48 +140,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         Intent intent = getIntent();
         final int id = intent.getExtras().getInt("id");
         Main_list_item item = (Main_list_item)intent.getSerializableExtra("item");
-
-        // 1. 레트로핏을 생성하고
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://mozzi.co.kr/api/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        Talent_Detail_Interface tdService = retrofit.create(Talent_Detail_Interface.class);
-
-        final Call<TalentDetail> tds = tdService.getTalentDetail(String.valueOf(id));
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    td = tds.execute().body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-
-//        tds.enqueue(new Callback<TalentDetail>() {
-//            @Override
-//            public void onResponse(Call<TalentDetail> call, Response<TalentDetail> response) {
-//                td = response.body();
-//                Log.e("ddddddasdfa", String.valueOf(td.getCurriculums().size()));
-//                Log.e("ddddddasdfa", String.valueOf(td.getTitle()));
-//            }
-//
-//            @Override
-//            public void onFailure(Call<TalentDetail> call, Throwable t) {
-//
-//            }
-//        });
+        td = (TalentDetail)intent.getSerializableExtra("td");
 
 
 

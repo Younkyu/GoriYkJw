@@ -1,8 +1,10 @@
 package goriproject.ykjw.com.myapplication;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -85,9 +87,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         if(datas2.size() == 0) {
-            TutorLoader.loadData();
+            CheckTypesTask task = new CheckTypesTask();
+            task.execute();
             //Toast.makeText(this, TutorLoader.datasRealy.size(), Toast.LENGTH_SHORT).show();
-
         }
         if(TalentLoader.talent_datas.size() ==0) {
             TalentLoader.loadData();
@@ -658,5 +660,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static void rcanoti() {
         rca.notifyDataSetChanged();
     }
+
+
+    private class CheckTypesTask extends AsyncTask<Void, Void, Void> {
+
+        ProgressDialog asyncDialog = new ProgressDialog(
+                MainActivity.this);
+
+        @Override
+        protected void onPreExecute() {
+            asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            asyncDialog.setMessage("로딩중입니다..");
+
+            // show dialog
+            asyncDialog.show();
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            TutorLoader.loadData();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            asyncDialog.dismiss();
+            rcanoti();
+            super.onPostExecute(result);
+        }
+    }
+
+
 }
 

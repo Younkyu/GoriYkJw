@@ -281,8 +281,6 @@ public class Second_OneFragment extends Fragment implements YouTubePlayer.OnInit
                 arr[i] = ran;    // ran에 받은 값을 arr[i]방에 넣습니다.
         }
 
-        TutorLoader.loadData();
-
         // 데이터 넣기
         t1 = datas.get(arr[0]);
         Glide.with(getContext()).load(t1.getCover_image()).into(iv_one_otherimg1);
