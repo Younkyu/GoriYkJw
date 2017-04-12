@@ -191,6 +191,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             public void onClick(View v) {
                 Intent intent = new Intent(SecondActivity.this, ApplyActivity.class);
                 intent.putExtra("id", id);
+                intent.putExtra("td", td);
                 startActivity(intent);
             }
         });

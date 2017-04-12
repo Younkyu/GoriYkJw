@@ -127,7 +127,7 @@ public class Second_OneFragment extends Fragment implements YouTubePlayer.OnInit
         Glide.with(this).load(item.getTutor().getProfile_image()).into(iv_second_profile);
 
         tv_price.setText(item.getPrice_per_hour()+"원/시간");
-        tv_maxman.setText("최대"+item.getNumber_of_class()+"명");
+        tv_maxman.setText(item.getType());
         tv_schedule.setText(item.getHours_per_class()+"시간/회");
         btn_second_numoftuty.setText("누적참여자"+item.getReview_count()+"명");
 
@@ -138,7 +138,6 @@ public class Second_OneFragment extends Fragment implements YouTubePlayer.OnInit
 
         txt_one_tutorinfo = (TextView)view.findViewById(R.id.txt_one_tutorinfo);
         txt_one_introduce = (TextView)view.findViewById(R.id.txt_one_introduce);
-        txt_one_whotuty = (TextView)view.findViewById(R.id.txt_one_whotuty);
         txt_secondone_alltime = (TextView)view.findViewById(R.id.txt_secondone_alltime);
         txt_secondone_allprice = (TextView)view.findViewById(R.id.txt_secondone_allprice);
 
@@ -204,6 +203,11 @@ public class Second_OneFragment extends Fragment implements YouTubePlayer.OnInit
                     LinearLayout.LayoutParams p7 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     iv3.setLayoutParams(p7);
                     li_son3.addView(iv3);
+                } else {
+                    View v = new View(getContext());
+                    LinearLayout.LayoutParams p20 = new LinearLayout.LayoutParams(30, 30);
+                    v.setLayoutParams(p20);
+                    li_son3.addView(v);
                 }
 
 
@@ -216,7 +220,7 @@ public class Second_OneFragment extends Fragment implements YouTubePlayer.OnInit
 
 
         //유튜브
-        if(td.getVideo1() != "") {
+        if(td.getVideo1() != "" && td.getVideo1() != null) {
             YouTubePlayerSupportFragment mYoutubePlayerFragment = new YouTubePlayerSupportFragment();
             mYoutubePlayerFragment.initialize("AIzaSyBQVAdj7fCNWvgha7ue8EXg2hCn-1lUBBo", this);
             FragmentManager fragmentManager = getFragmentManager();
@@ -224,6 +228,8 @@ public class Second_OneFragment extends Fragment implements YouTubePlayer.OnInit
             fragmentTransaction.replace(R.id.fragment_youtube_player, mYoutubePlayerFragment);
             fragmentTransaction.commit();
         } else {
+            TextView tv_title_youtube = (TextView)view.findViewById(R.id.tv_one_title_youtube);
+            tv_title_youtube.setVisibility(View.GONE);
             FrameLayout yt = (FrameLayout)view.findViewById(R.id.fragment_youtube_player);
             yt.setVisibility(View.GONE);
         }
@@ -238,6 +244,9 @@ public class Second_OneFragment extends Fragment implements YouTubePlayer.OnInit
                 iv3.setLayoutParams(p6);
                 li_one_img.addView(iv3);
             }
+        } else {
+            TextView tv_title_img = (TextView)view.findViewById(R.id.tv_one_title_img);
+            tv_title_img.setVisibility(View.GONE);
         }
 
 
