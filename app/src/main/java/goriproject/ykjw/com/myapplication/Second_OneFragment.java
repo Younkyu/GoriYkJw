@@ -1,10 +1,12 @@
 package goriproject.ykjw.com.myapplication;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -26,10 +28,15 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
+import java.io.IOException;
 import java.util.Random;
 
+import goriproject.ykjw.com.myapplication.Interfaces.Talent_Detail_Interface;
 import goriproject.ykjw.com.myapplication.domain.Results;
 import goriproject.ykjw.com.myapplication.domain.TalentDetail;
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static goriproject.ykjw.com.myapplication.Statics.datas;
 import static goriproject.ykjw.com.myapplication.Statics.maxsize;
@@ -337,38 +344,43 @@ public class Second_OneFragment extends Fragment implements YouTubePlayer.OnInit
         @Override
         public void onClick(View v) {
             Intent intent;
+            CheckTypesTask task;
             switch (v.getId()) {
                 case R.id.iv_one_otherimg1 :
                     intent = new Intent(getContext(), SecondActivity.class);
                     onDetach();
-                    activity.finish();
                     intent.putExtra("id",Integer.parseInt(t1.getPk().trim()));
                     intent.putExtra("item",t1);
-                    getContext().startActivity(intent);
+                    task = new CheckTypesTask();
+                    task.setidintent(Integer.parseInt(t1.getPk().trim()),intent);
+                    task.execute();
                     break;
                 case R.id.iv_one_otherimg2 :
                     intent = new Intent(getContext(), SecondActivity.class);
                     onDetach();
-                    activity.finish();
                     intent.putExtra("id",Integer.parseInt(t2.getPk().trim()));
                     intent.putExtra("item",t2);
-                    getContext().startActivity(intent);
+                    task = new CheckTypesTask();
+                    task.setidintent(Integer.parseInt(t2.getPk().trim()),intent);
+                    task.execute();
                     break;
                 case R.id.iv_one_otherimg3 :
                     intent = new Intent(getContext(), SecondActivity.class);
                     onDetach();
-                    activity.finish();
                     intent.putExtra("id",Integer.parseInt(t3.getPk().trim()));
                     intent.putExtra("item",t3);
-                    getContext().startActivity(intent);
+                    task = new CheckTypesTask();
+                    task.setidintent(Integer.parseInt(t3.getPk().trim()),intent);
+                    task.execute();
                     break;
                 case R.id.iv_one_otherimg4 :
                     intent = new Intent(getContext(), SecondActivity.class);
                     onDetach();
-                    activity.finish();
                     intent.putExtra("id",Integer.parseInt(t4.getPk().trim()));
                     intent.putExtra("item",t4);
-                    getContext().startActivity(intent);
+                    task = new CheckTypesTask();
+                    task.setidintent(Integer.parseInt(t1.getPk().trim()),intent);
+                    task.execute();
                     break;
             }
         }
@@ -391,6 +403,59 @@ public class Second_OneFragment extends Fragment implements YouTubePlayer.OnInit
             Toast.makeText(this.getActivity(),
                     "YouTubePlayer.onInitializationFailure(): " + result.toString(),
                     Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private class CheckTypesTask extends AsyncTask<Void, Void, Void> {
+
+        ProgressDialog asyncDialog = new ProgressDialog(
+                getContext());
+
+        Intent intent;
+        int id = 0;
+
+        public void setidintent(int id, Intent intent) {
+            this.id = id;
+            this.intent = intent;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            asyncDialog.setMessage("데이터 로딩중..");
+
+            // show dialog
+            asyncDialog.show();
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            // 1. 레트로핏을 생성하고
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("https://mozzi.co.kr/api/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            Talent_Detail_Interface tdService = retrofit.create(Talent_Detail_Interface.class);
+
+            final Call<TalentDetail> tds = tdService.getTalentDetail(String.valueOf(id));
+
+            try {
+                td = tds.execute().body();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            intent.putExtra("td",td);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            asyncDialog.dismiss();
+            activity.finish();
+            getContext().startActivity(intent);
+            super.onPostExecute(result);
         }
     }
 }

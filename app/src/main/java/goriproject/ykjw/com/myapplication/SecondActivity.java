@@ -141,9 +141,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         viewPager_second_activity.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
 
-
-
-
         //드로어레이아웃
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -160,7 +157,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         three.setTalent(talent,item);
         four.setTalent(talent,item);
         one.setActivity(this);
-
 
         // 버튼 초기화
         Button btnApplySecondTemp = (Button)findViewById(R.id.btnApplySecondTemp);
@@ -193,9 +189,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
                 startActivity(intent);
             }
         });
-
-
-
 
         // 체크 박스
         checkbox_wishList = (CheckBox)findViewById(R.id.checkbox_wishList);

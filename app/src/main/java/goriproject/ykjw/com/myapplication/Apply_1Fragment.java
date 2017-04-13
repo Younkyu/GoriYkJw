@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
+import goriproject.ykjw.com.myapplication.Util.DipCal;
 import goriproject.ykjw.com.myapplication.domain.TalentDetail;
 
 
@@ -95,9 +97,11 @@ public class Apply_1Fragment extends Fragment {
         for(String datas : location) {
             final Button btn = new Button(getContext());
             btn.setText(datas);
-            btn.setWidth(70);
-            btn.setHeight(30);
-            LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(120, 80);
+            final int width = DipCal.convertPixelsToDp(70,getContext());
+            final int height = DipCal.convertPixelsToDp(40,getContext());
+            btn.setWidth(width);
+            btn.setHeight(height);
+            LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(width, height);
             p.weight = 0;
             p.leftMargin = 10;
             btn.setLayoutParams(p);
@@ -132,11 +136,13 @@ public class Apply_1Fragment extends Fragment {
         for(String datas : canday) {
             final Button btn = new Button(getContext());
             btn.setText(datas);
-            btn.setWidth(15);
-            btn.setHeight(15);
+            final int width = DipCal.convertPixelsToDp(40,getContext());
+            final int height = DipCal.convertPixelsToDp(40,getContext());
+            btn.setWidth(width);
+            btn.setHeight(height);
             btn.setTextSize(14);
             btn.setTextColor(getResources().getColor(R.color.cardview_dark_background));
-            LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(80, 80);
+            LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(width, height);
             p.weight = 0;
             p.leftMargin = 10;
             btn.setLayoutParams(p);
@@ -169,11 +175,13 @@ public class Apply_1Fragment extends Fragment {
         for(String datas : cantime) {
             final Button btn = new Button(getContext());
             btn.setText(datas);
-            btn.setWidth(70);
-            btn.setHeight(30);
+            final int width = DipCal.convertPixelsToDp(90,getContext());
+            final int height = DipCal.convertPixelsToDp(40,getContext());
+            btn.setWidth(width);
+            btn.setHeight(height);
             btn.setTextSize(14);
             btn.setTextColor(getResources().getColor(R.color.cardview_dark_background));
-            LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(150, 80);
+            LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(width, height);
             p.weight = 0;
             p.leftMargin = 10;
             btn.setLayoutParams(p);

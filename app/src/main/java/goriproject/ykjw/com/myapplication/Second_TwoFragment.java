@@ -7,6 +7,7 @@ import android.graphics.drawable.StateListDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.RadioGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import goriproject.ykjw.com.myapplication.Util.DipCal;
 import goriproject.ykjw.com.myapplication.domain.Results;
 import goriproject.ykjw.com.myapplication.domain.TalentDetail;
 
@@ -149,6 +151,7 @@ public class Second_TwoFragment extends Fragment {
     }
 
 
+
     public void makeRadioButtonDay(RadioGroup.LayoutParams params, RadioGroup dynamic_radioarea, final int loc_index) {
         // 동적으로 라디오 버튼 생성
         //for (int j = 0; j < talentDetail.getLocations(); j++) {
@@ -158,8 +161,10 @@ public class Second_TwoFragment extends Fragment {
         radioButton.setLayoutParams(params);
         radioButton.setBackgroundResource(R.drawable.custom_button_selector);
         radioButton.setButtonDrawable(new StateListDrawable());
+        final int width = DipCal.convertPixelsToDp(130,getContext());
+        final int height = DipCal.convertPixelsToDp(80,getContext());
         radioButton.setPaddingRelative(60, 0, 60, 0);
-        radioButton.setHeight(130);
+        radioButton.setHeight(width);
         //    radioButton.setTag(j);
         radioButton.setTextColor(ContextCompat.getColorStateList(getContext(), R.color.custom_button_text_selector));
 
