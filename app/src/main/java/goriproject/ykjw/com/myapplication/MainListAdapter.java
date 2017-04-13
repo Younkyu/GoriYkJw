@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.List;
 
 import goriproject.ykjw.com.myapplication.Interfaces.Talent_Detail_Interface;
-import goriproject.ykjw.com.myapplication.domain.Main_list_item;
+import goriproject.ykjw.com.myapplication.domain.Results;
 import goriproject.ykjw.com.myapplication.domain.TalentDetail;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -37,7 +37,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.CustomViewHolder> {
 
-    List<Main_list_item> datas;
+    List<Results> datas;
     // 리스트 각 행에서 사용되는 레이아웃 xml의 아이디
     int itemLayout;
     TalentDetail td;
@@ -45,7 +45,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
     Context context; // 클릭처리, 애니메이션 등을 위해 시스템자원 사용이 필요
     // 리스트 각 행에서 사용되는 레이아웃 xml의 아이디디
 
-    public MainListAdapter(List<Main_list_item> datas, int itemLayout, Context context) {
+    public MainListAdapter(List<Results> datas, int itemLayout, Context context) {
         this.datas = datas;
         this.itemLayout = itemLayout;
         this.context = context;
@@ -103,7 +103,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
         TextView class_name,tutor_name;
         RatingBar ratingBar;
         int id;
-        Main_list_item item;
+        Results item;
 
          CustomViewHolder(View itemView) {
             super(itemView);

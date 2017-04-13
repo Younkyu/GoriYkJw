@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import goriproject.ykjw.com.myapplication.domain.Main_list_item;
+import goriproject.ykjw.com.myapplication.domain.Results;
 
 
 /**
@@ -16,12 +16,12 @@ import goriproject.ykjw.com.myapplication.domain.Main_list_item;
 public class Second_FourFragment extends Fragment {
     View view;
     private Talent talent;
-    Main_list_item item;
+    Results item;
     public Second_FourFragment() {
         // Required empty public constructor
     }
 
-    public void setTalent(Talent talenta, Main_list_item item) {
+    public void setTalent(Talent talenta, Results item) {
         // Required empty public constructor
         talent = talenta;
         this.item = item;

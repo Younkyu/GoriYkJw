@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,13 +25,11 @@ import com.bumptech.glide.Glide;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
-import com.google.android.youtube.player.YouTubePlayerView;
 
 import java.util.Random;
 
-import goriproject.ykjw.com.myapplication.domain.Main_list_item;
+import goriproject.ykjw.com.myapplication.domain.Results;
 import goriproject.ykjw.com.myapplication.domain.TalentDetail;
-import goriproject.ykjw.com.myapplication.domain.Tutor;
 
 import static goriproject.ykjw.com.myapplication.Statics.datas;
 import static goriproject.ykjw.com.myapplication.Statics.maxsize;
@@ -46,8 +43,8 @@ public class Second_OneFragment extends Fragment implements YouTubePlayer.OnInit
     LinearLayout ll_one_curiculum;
     View view;
     private Talent talent;
-    Main_list_item t1,t2,t3,t4;
-    Main_list_item item;
+    Results t1,t2,t3,t4;
+    Results item;
     TalentDetail td = new TalentDetail();
     SecondActivity activity;
 
@@ -60,7 +57,7 @@ public class Second_OneFragment extends Fragment implements YouTubePlayer.OnInit
     public Second_OneFragment() {
         // Required empty public constructor
     }
-    public void setTalent(Talent talenta, Main_list_item item, TalentDetail td) {
+    public void setTalent(Talent talenta, Results item, TalentDetail td) {
         // Required empty public constructor
         talent = talenta;
         this.item = item;

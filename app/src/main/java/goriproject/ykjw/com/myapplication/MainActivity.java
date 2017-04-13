@@ -6,19 +6,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -27,7 +21,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -41,11 +34,9 @@ import com.bumptech.glide.Glide;
 import com.tsengvn.typekit.TypekitContextWrapper;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import goriproject.ykjw.com.myapplication.domain.Main_list_item;
+import goriproject.ykjw.com.myapplication.domain.Results;
 
 import static goriproject.ykjw.com.myapplication.Statics.datas;
 import static goriproject.ykjw.com.myapplication.Statics.is_signin;
@@ -57,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int category_menu_count = 0;
     ImageButton img,img2;
     ImageView mainimg;
-    static List<Main_list_item> datas2 = new ArrayList<>();
+    static List<Results> datas2 = new ArrayList<>();
     static MainListAdapter rca;
     EditText editText;
     RecyclerView rv;
@@ -451,9 +442,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         if(!location.equals("") ||  !category.equals("")) {
-            List<Main_list_item> temp = new ArrayList<>();
+            List<Results> temp = new ArrayList<>();
 
-            for (Main_list_item temp2 : datas) {
+            for (Results temp2 : datas) {
                 if (temp2.getRegions().size() != 0) {
                     for (String temp3 : temp2.getRegions()) {
                         if (temp3.contains(location)) {
@@ -466,7 +457,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-            for (Main_list_item it : temp) {
+            for (Results it : temp) {
                 if (it.getCategory().contains(category)) {
                     datas2.add(it);
                 }
@@ -551,7 +542,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         datas2.clear();
 
         String location, category;
-        List<Main_list_item> temp4 = new ArrayList<>();
+        List<Results> temp4 = new ArrayList<>();
 
         location = tv_location.getText().toString();
         category = tv_category.getText().toString();
@@ -564,9 +555,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         if(!location.equals("") ||  !category.equals("")) {
-            List<Main_list_item> temp = new ArrayList<>();
+            List<Results> temp = new ArrayList<>();
 
-            for (Main_list_item temp2 : datas) {
+            for (Results temp2 : datas) {
                 if (temp2.getRegions().size() != 0) {
                     for (String temp3 : temp2.getRegions()) {
                         if (temp3.contains(location)) {
@@ -576,7 +567,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }
             }
-            for (Main_list_item it : temp) {
+            for (Results it : temp) {
                 if (it.getCategory().contains(category)) {
                     temp4.add(it);
                 }
@@ -586,7 +577,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             temp4.addAll(datas);
         }
 
-        for(Main_list_item temp5 : temp4) {
+        for(Results temp5 : temp4) {
             if(temp5.getTitle().contains(searchText)) {
                 datas2.add(temp5);
             } else if(temp5.getTutor().getName().contains(searchText)) {

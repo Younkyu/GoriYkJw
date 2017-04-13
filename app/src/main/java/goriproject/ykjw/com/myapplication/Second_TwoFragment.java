@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import goriproject.ykjw.com.myapplication.domain.Main_list_item;
+import goriproject.ykjw.com.myapplication.domain.Results;
 
 
 /**
@@ -24,12 +24,12 @@ public class Second_TwoFragment extends Fragment {
     private Talent talent;
     int CHECKBOXCOUNT = 3;
     private View view;
-    Main_list_item item;
+    Results item;
 
     public Second_TwoFragment() {
         // Required empty public constructor
     }
-    public void setTalent(Talent talenta, Main_list_item item) {
+    public void setTalent(Talent talenta, Results item) {
         // Required empty public constructor
         talent = talenta;
         this.item = item;
@@ -96,7 +96,6 @@ public class Second_TwoFragment extends Fragment {
             final RadioButton radioButton = new RadioButton(getContext());
             radioButton.setId(j);
             radioButton.setText(content[j]);
-            radioButton.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             radioButton.setLayoutParams(params);
             radioButton.setBackgroundResource(R.drawable.custom_button_selector);
             radioButton.setButtonDrawable(new StateListDrawable());
@@ -123,7 +122,6 @@ public class Second_TwoFragment extends Fragment {
             final RadioButton radioButton = new RadioButton(getContext());
             radioButton.setId(j);
             radioButton.setText(content[j]);
-            radioButton.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             radioButton.setLayoutParams(params);
             radioButton.setBackgroundResource(R.drawable.custom_button_selector);
             radioButton.setButtonDrawable(new StateListDrawable());
