@@ -152,12 +152,11 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
         // 프래그먼트 초기화
         one = new Second_OneFragment();
-        two = new Second_TwoFragment();
+        two = Second_TwoFragment.newInstance(td);
         three = new Second_ThreeFragment();
         four = new Second_FourFragment();
         Log.e("sdfdfdfadfasd2222", String.valueOf(td.getTitle()));
         one.setTalent(talent,item, td);
-        two.setTalent(talent,item);
         three.setTalent(talent,item);
         four.setTalent(talent,item);
         one.setActivity(this);
