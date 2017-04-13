@@ -110,8 +110,8 @@ public class Second_OneFragment extends Fragment implements YouTubePlayer.OnInit
         TextView tv_price = (TextView)view.findViewById(R.id.tv_second_timeper);
         TextView tv_maxman = (TextView)view.findViewById(R.id.tv_second_maxman);
         TextView tv_schedule = (TextView)view.findViewById(R.id.tv_second_schedule);
-        txt_name.setText(item.getTutor().getName()+"/"+item.getTutor().getNickname());
-        txt_title.setText(item.getTitle());
+        txt_name.setText(td.getTutor().getName()+"/"+item.getTutor().getNickname());
+        txt_title.setText(td.getTitle());
         if(item.getRegions() != null) {
             String location = "";
             for(String i : item.getRegions()) {
@@ -127,13 +127,13 @@ public class Second_OneFragment extends Fragment implements YouTubePlayer.OnInit
 
         }
 
-        Glide.with(this).load(item.getCover_image()).thumbnail(0.1f).into(iv_second_cover);
-        Glide.with(this).load(item.getTutor().getProfile_image()).into(iv_second_profile);
+        Glide.with(this).load(td.getCover_image()).thumbnail(0.1f).into(iv_second_cover);
+        Glide.with(this).load(td.getTutor().getProfile_image()).into(iv_second_profile);
 
-        tv_price.setText(item.getPrice_per_hour()+"원/시간");
-        tv_maxman.setText(item.getType());
-        tv_schedule.setText(item.getHours_per_class()+"시간/회");
-        btn_second_numoftuty.setText("누적참여자"+item.getReview_count()+"명");
+        tv_price.setText(td.getPrice_per_hour()+"원/시간");
+        tv_maxman.setText(td.getType());
+        tv_schedule.setText(td.getHours_per_class()+"시간/회");
+        btn_second_numoftuty.setText("누적참여자"+td.getRegistration_count()+"명");
 
         int time = Integer.parseInt(td.getHours_per_class().trim())*Integer.parseInt(td.getNumber_of_class().trim());
         int priceall = time * Integer.parseInt(td.getPrice_per_hour().trim());
@@ -273,6 +273,7 @@ public class Second_OneFragment extends Fragment implements YouTubePlayer.OnInit
             TutorLoader.loadData();
         }
         Log.e("ddddddddddddxxxxxd", String.valueOf(maxsize));
+        Log.e("d1asdfs13232",td.getVideo1());
         int[] arr = new int[maxsize];  //1차원배열 방 10개를 만듭니다.
         int ran=0;    //랜덤값을 받을 변수를 만듭니다.
         boolean cheak;    // 비교하기 위해 boolean형 변수를 만듭니다.
@@ -391,7 +392,12 @@ public class Second_OneFragment extends Fragment implements YouTubePlayer.OnInit
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
         if(!wasRestored){
-            youTubePlayer.cueVideo(td.getVideo1());
+           // https://youtu.be/84SnMVQVYkY
+            if(!td.getVideo1().equals("")) {
+                int yt = td.getVideo1().indexOf("be/");
+                String ytt = td.getVideo1().substring(yt+3,td.getVideo1().length());
+                youTubePlayer.cueVideo(ytt);
+            }
         }
     }
 

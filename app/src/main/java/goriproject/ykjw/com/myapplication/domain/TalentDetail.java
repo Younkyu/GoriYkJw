@@ -43,6 +43,16 @@ public class TalentDetail implements Serializable
 
     private List<Curriculums> curriculums;
 
+    public String getRegistration_count() {
+        return registration_count;
+    }
+
+    public void setRegistration_count(String registration_count) {
+        this.registration_count = registration_count;
+    }
+
+    private String registration_count;
+
     private Tutor tutor;
 
     private String pk;

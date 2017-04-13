@@ -164,10 +164,15 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         btnApplySecondTemp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+             if(is_signin) {
                 Intent intent = new Intent(SecondActivity.this, ApplyActivity.class);
                 intent.putExtra("id", id);
                 intent.putExtra("td", td);
                 startActivity(intent);
+            } else {
+                Intent intent = new Intent(SecondActivity.this, SignInActivity.class);
+                startActivity(intent);
+            }
             }
         });
 

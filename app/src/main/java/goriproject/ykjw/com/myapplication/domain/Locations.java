@@ -13,6 +13,16 @@ public class Locations implements Serializable
 
     private String extra_fee_amount;
 
+    private String pk;
+
+    public String getPk() {
+        return pk;
+    }
+
+    public void setPk(String pk) {
+        this.pk = pk;
+    }
+
     private List<String> time;
 
     private String talent;

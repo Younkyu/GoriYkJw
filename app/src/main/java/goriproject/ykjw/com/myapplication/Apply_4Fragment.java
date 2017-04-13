@@ -1,7 +1,9 @@
 package goriproject.ykjw.com.myapplication;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,8 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.IOException;
+
+import goriproject.ykjw.com.myapplication.Interfaces.Apply_Doc_Interface;
+import goriproject.ykjw.com.myapplication.Interfaces.Talent_Detail_Interface;
 import goriproject.ykjw.com.myapplication.domain.TalentDetail;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import static goriproject.ykjw.com.myapplication.Statics.key;
 
 public class Apply_4Fragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -62,7 +75,8 @@ public class Apply_4Fragment extends Fragment {
         btn_next_5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.goAp5();
+                CheckTypesTask task = new CheckTypesTask();
+                task.execute();
             }
         });
 
@@ -77,7 +91,65 @@ public class Apply_4Fragment extends Fragment {
         return view;
     }
 
+    private class CheckTypesTask extends AsyncTask<Void, Void, String> {
 
+        ProgressDialog asyncDialog = new ProgressDialog(
+                getContext());
+
+        int id = 0;
+
+        public void setid(int id) {
+            this.id = id;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            asyncDialog.setMessage("데이터 로딩중..");
+
+            // show dialog
+            asyncDialog.show();
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(Void... arg0) {
+            // 1. 레트로핏을 생성하고
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("https://mozzi.co.kr/api/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            Apply_Doc_Interface adService = retrofit.create(Apply_Doc_Interface.class);
+
+            Call<ResponseBody> tds = adService.postApply("Token "+key,activity.Location_pk,activity.student_level,activity.tutor_msg);
+
+            try {
+                if(tds.execute().code() == 201) {
+                    return "ok";
+                }else {
+                    return "no";
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            asyncDialog.dismiss();
+
+            if(result.equals("ok")) {
+                activity.goAp5();
+            }else {
+                Toast.makeText(getContext(),"등록에 실패했습니다.",Toast.LENGTH_LONG).show();
+                activity.finish();
+            }
+            super.onPostExecute(result);
+        }
+    }
 
     @Override
     public void onAttach(Context context) {

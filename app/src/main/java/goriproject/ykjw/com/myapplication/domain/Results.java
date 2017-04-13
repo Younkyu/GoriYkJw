@@ -23,6 +23,7 @@ public class Results implements Serializable
 
     private List<String> regions;
 
+
     public List<String> getRegions() {
         return regions;
     }
