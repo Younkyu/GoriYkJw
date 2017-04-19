@@ -136,7 +136,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 SignUpInterface service = retrofit.create(SignUpInterface.class);
 
                 // 토큰 받아오기
-                Call<Result> loginData = service.facebooklogin(result.getAccessToken().getToken().toString());
+                Call<Result> loginData = service.facebooklogin(result.getAccessToken().getToken());
 
                 loginData.enqueue(new Callback<Result>() {
                     @Override

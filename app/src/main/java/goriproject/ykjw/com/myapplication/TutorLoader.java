@@ -103,9 +103,9 @@ public class TutorLoader {
                 Results no2 = (Results)o2;
 
                 //-1과 1의 위치를 조정하면 오름차순/내림차순을 조절할 수 있다.
-                if(Integer.parseInt(no1.getAverage_rate().trim()) >Integer.parseInt(no2.getAverage_rate().trim())) {
+                if(Integer.parseInt(no1.getAverage_rates().getTotal().trim()) >Integer.parseInt(no2.getAverage_rates().getTotal().trim())) {
                     return -1;
-                } else if (Integer.parseInt(no1.getAverage_rate().trim()) == Integer.parseInt(no2.getAverage_rate().trim())){
+                } else if (Integer.parseInt(no1.getAverage_rates().getTotal().trim()) == Integer.parseInt(no2.getAverage_rates().getTotal().trim())){
                     return 0;
                 } else {
                     return 1;

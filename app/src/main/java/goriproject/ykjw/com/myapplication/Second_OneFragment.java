@@ -95,7 +95,7 @@ public class Second_OneFragment extends Fragment implements YouTubePlayer.OnInit
             rating_second.setRating(rating);
             //레이팅바의 색깔을 바꿔야 할 경우에 사용
             LayerDrawable stars = (LayerDrawable) rating_second.getProgressDrawable();
-            stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
+            stars.getDrawable(2).setColorFilter(Color.argb(255,238,83,78), PorterDuff.Mode.SRC_ATOP);
             tv_second_new.setVisibility(View.GONE);
         } else {
             rating_second.setVisibility(View.GONE);

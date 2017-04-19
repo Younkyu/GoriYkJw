@@ -126,6 +126,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //3. 리사이클러 뷰에 아답터 세팅하기
         rv.setAdapter(rca);
 
+        rv.setNestedScrollingEnabled(false);
+
         //4. 리사이클러 뷰 매니저 등록하기(뷰의 모양을 결정 : 그리드, 일반리스트, 비대칭그리드)
         rv.setLayoutManager(new LinearLayoutManager(this));
 
@@ -458,7 +460,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
             for (Results it : temp) {
-                if (it.getCategory().contains(category)) {
+                String t = it.getCategory().replaceAll("\\p{Z}", "");
+                if (t.contains(category)) {
                     datas2.add(it);
                 }
             }
@@ -662,6 +665,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         protected void onPreExecute() {
             asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             asyncDialog.setMessage("로딩중입니다..");
+            asyncDialog.setCanceledOnTouchOutside(false);
 
             // show dialog
             asyncDialog.show();
@@ -681,6 +685,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             super.onPostExecute(result);
         }
     }
+
 
 
 }

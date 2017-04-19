@@ -39,8 +39,9 @@ public class ApplyActivity extends AppCompatActivity {
     Talent talent;
     TalentDetail td;
     String tutor_msg = "";
-    String student_level = "";
-    String Location_pk = "";
+    int student_level = 0;
+    int Location_pk = 0;
+    int experience_length = 0;
 
     ImageView img;
     @Override

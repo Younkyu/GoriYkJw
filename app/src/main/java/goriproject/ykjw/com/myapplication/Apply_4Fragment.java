@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -122,12 +123,15 @@ public class Apply_4Fragment extends Fragment {
 
             Apply_Doc_Interface adService = retrofit.create(Apply_Doc_Interface.class);
 
-            Call<ResponseBody> tds = adService.postApply("Token "+key,activity.Location_pk,activity.student_level,activity.tutor_msg);
+            Call<ResponseBody> tds = adService.postApply("Token "+key,activity.Location_pk,activity.tutor_msg,activity.student_level, activity.experience_length);
 
             try {
                 if(tds.execute().code() == 201) {
+//                    Log.e("responsecode = " , String.valueOf(tds.execute().code()));
                     return "ok";
+
                 }else {
+
                     return "no";
                 }
             } catch (IOException e) {
@@ -140,10 +144,18 @@ public class Apply_4Fragment extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             asyncDialog.dismiss();
-
             if(result.equals("ok")) {
+                Log.e("key = ",key);
+                Log.e("studentlevel : ", String.valueOf(activity.student_level));
+                Log.e("tutor_msg : ", activity.tutor_msg);
+                Log.e("Locationpk = ,", String.valueOf(activity.Location_pk));
                 activity.goAp5();
             }else {
+                Log.e("key = ",key);
+                Log.e("studentlevel : ", String.valueOf(activity.student_level));
+                Log.e("tutor_msg : ", activity.tutor_msg);
+                Log.e("Locationpk = ,", String.valueOf(activity.Location_pk));
+                Log.e("LENGTH = ,", String.valueOf(activity.experience_length));
                 Toast.makeText(getContext(),"등록에 실패했습니다.",Toast.LENGTH_LONG).show();
                 activity.finish();
             }

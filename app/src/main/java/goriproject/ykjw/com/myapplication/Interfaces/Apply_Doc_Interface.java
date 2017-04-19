@@ -8,7 +8,9 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 /**
@@ -17,10 +19,10 @@ import retrofit2.http.Query;
 
 public interface Apply_Doc_Interface {
 
-    @FormUrlEncoded
+    @Multipart
     @POST("talent/add/registration/")
-    Call<ResponseBody> postApply(@Header("Authorization") String Token, @Field("location_pk") String pk,
-                                 @Field("student_level") String level,
-                                 @Field("message_to_tutor") String msg);
+    Call<ResponseBody> postApply(@Header("Authorization") String Token, @Part("location_pk") int pk,
+                                 @Part("message_to_tutor") String msg, @Part("student_level") int level,
+                                 @Part("experience_length") int exl);
 
 }

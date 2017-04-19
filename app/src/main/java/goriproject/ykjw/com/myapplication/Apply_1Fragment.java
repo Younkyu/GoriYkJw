@@ -23,6 +23,7 @@ import java.util.List;
 
 import goriproject.ykjw.com.myapplication.Util.DipCal;
 import goriproject.ykjw.com.myapplication.domain.Locations;
+import goriproject.ykjw.com.myapplication.domain.Results;
 import goriproject.ykjw.com.myapplication.domain.TalentDetail;
 
 
@@ -42,6 +43,7 @@ public class Apply_1Fragment extends Fragment implements View.OnClickListener {
     TextView tv_apply1_plusinfo;
     ApplyActivity activity;
     List<Button> locationbtnlist = new ArrayList<>();
+    List<Button> locationbtnlist2 = new ArrayList<>();
 
     public void setActivity(ApplyActivity activity){
         this.activity = activity;
@@ -124,8 +126,8 @@ public class Apply_1Fragment extends Fragment implements View.OnClickListener {
         locationbtnlist.get(0).setBackgroundResource(R.drawable.custom_button5);
         locationbtnlist.get(0).setTextColor(Color.WHITE);
 
-
         setLocation(0);
+        setTime(0, 0);
 
 
 
@@ -250,22 +252,42 @@ public class Apply_1Fragment extends Fragment implements View.OnClickListener {
     }
 
     public void setLocation(int tag){
+        int tag2 = 0;
         btn2layout.removeAllViews();
-        final Button btn2 = new Button(getContext());
-        btn2.setText(td.getLocations().get(tag).getDay());
-        final int width = DipCal.convertPixelsToDp(40,getContext());
-        final int height = DipCal.convertPixelsToDp(40,getContext());
-        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(width, height);
-        p.weight = 0;
-        p.leftMargin = 10;
-        btn2.setLayoutParams(p);
-        btn2.setTextSize(14);
-        btn2.setTextColor(getResources().getColor(R.color.cardview_dark_background));
-        btn2.setBackgroundResource(R.drawable.custom_button6);
-        btn2layout.addView(btn2);
+        locationbtnlist2.clear();
+        for(Results rt : td.getLocations().get(tag).getResults()) {
+            final Button btn2 = new Button(getContext());
+            btn2.setText(rt.getDay());
+            final int width = DipCal.convertPixelsToDp(40,getContext());
+            final int height = DipCal.convertPixelsToDp(40,getContext());
+            LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(width, height);
+            p.weight = 0;
+            p.leftMargin = 10;
+            btn2.setLayoutParams(p);
+            btn2.setTextSize(14);
+            btn2.setTextColor(getResources().getColor(R.color.cardview_dark_background));
+            btn2.setBackgroundResource(R.drawable.custom_button6);
+            btn2.setTag(tag2 + tag*10);
+            tag2 = tag2 +1 ;
+            locationbtnlist2.add(btn2);
+            btn2.setOnClickListener(btn2li);
+            btn2layout.addView(btn2);
+        }
 
+        locationbtnlist2.get(0).setBackgroundResource(R.drawable.custom_button5);
+        locationbtnlist2.get(0).setTextColor(Color.WHITE);
+
+
+    }
+
+    public void setText(int tag) {
+        for(Button btn : locationbtnlist) {
+        }
+    }
+
+    public void setTime(int tag, int tag2) {
         btn3layout.removeAllViews();
-        for(String btntime : td.getLocations().get(tag).getTime()) {
+        for(String btntime : td.getLocations().get(tag).getResults().get(tag2%10).getTime()) {
             final Button btn = new Button(getContext());
             btn.setText(btntime);
             final int width2 = DipCal.convertPixelsToDp(90,getContext());
@@ -283,17 +305,12 @@ public class Apply_1Fragment extends Fragment implements View.OnClickListener {
             btn3layout.addView(btn);
         }
 
-        if(td.getLocations().get(0).getExtra_fee().equals("N")) {
+        activity.Location_pk = Integer.parseInt(td.getLocations().get(tag).getResults().get(tag2%10).getPk().trim());
+
+        if(td.getLocations().get(tag).getResults().get(tag2%10).getExtra_fee().equals("N")) {
             tv_apply1_plusinfo.setText("추가비용 없음 ");
         }else {
-            tv_apply1_plusinfo.setText("추가비용 : " + td.getLocations().get(tag).getExtra_fee_amount()+"원");
-        }
-
-        activity.Location_pk = td.getLocations().get(tag).getPk();
-    }
-
-    public void setText(int tag) {
-        for(Button btn : locationbtnlist) {
+            tv_apply1_plusinfo.setText("추가비용 : " + td.getLocations().get(tag).getResults().get(tag2%10).getExtra_fee_amount());
         }
     }
 
@@ -306,6 +323,22 @@ public class Apply_1Fragment extends Fragment implements View.OnClickListener {
     public void onDetach() {
         super.onDetach();
     }
+
+    View.OnClickListener btn2li = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            for(Button btn : locationbtnlist2) {
+                btn.setBackgroundResource(R.drawable.custom_button6);
+                btn.setTextColor(getResources().getColor(R.color.cardview_dark_background));
+                if(v.getTag() == btn.getTag()) {
+                    btn.setBackgroundResource(R.drawable.custom_button5);
+                    btn.setTextColor(Color.WHITE);
+                }
+            }
+        setTime(((int)v.getTag()/10),((int)v.getTag()%10));
+        }
+
+    };
 
 
     @Override
@@ -320,5 +353,6 @@ public class Apply_1Fragment extends Fragment implements View.OnClickListener {
             }
         }
         setLocation((int)v.getTag());
+        setTime((int)v.getTag(), 0);
     }
 }

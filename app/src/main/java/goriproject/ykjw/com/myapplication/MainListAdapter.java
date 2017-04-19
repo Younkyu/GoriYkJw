@@ -63,14 +63,24 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
 
         holder.item = datas.get(position);
 
-        //holder.ratingBar.setRating(item.getTutor_rating()/20);
+//        holder.ratingBar.setRating(item.getTutor_rating()/20);
 //        int rating = (Integer.parseInt(holder.item.getAverage_rate()));
+
         long ratinglong = Math.round(Double.parseDouble(holder.item.getAverage_rate()));
         int rating = (int)ratinglong;
         holder.ratingBar.setRating(rating);
+
+        if(holder.item.getIs_soldout().equals("true")) {
+            holder.soldout.setVisibility(View.VISIBLE);
+            holder.soldout.bringToFront();
+            holder.tv_soldout.setVisibility(View.VISIBLE);
+            holder.tv_soldout.bringToFront();
+            holder.itemback.setClickable(false);
+        }
+
         //레이팅바의 색깔을 바꿔야 할 경우에 사용
         LayerDrawable stars = (LayerDrawable) holder.ratingBar.getProgressDrawable();
-        stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(2).setColorFilter(Color.argb(255,238,83,78), PorterDuff.Mode.SRC_ATOP);
         holder.class_name.setText(holder.item.getTitle());
         holder.tutor_name.setText(holder.item.getTutor().getName());
         holder.id = Integer.parseInt(holder.item.getPk().trim());
@@ -100,8 +110,9 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
     public class CustomViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView2;
         ConstraintLayout itemback;
-        TextView class_name,tutor_name;
+        TextView class_name,tutor_name,tv_soldout;
         RatingBar ratingBar;
+        View soldout;
         int id;
         Results item;
 
@@ -113,6 +124,8 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
              tutor_name = (TextView)itemView.findViewById(R.id.tutor_name);
              class_name = (TextView)itemView.findViewById(R.id.class_name);
              ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
+             tv_soldout = (TextView)itemView.findViewById(R.id.tv_soldout);
+             soldout = (View)itemView.findViewById(R.id.view_sold_out);
 
              itemback.setOnClickListener(new View.OnClickListener() {
                  @Override
@@ -146,7 +159,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
         protected void onPreExecute() {
             asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             asyncDialog.setMessage("데이터 로딩중..");
-
+            asyncDialog.setCanceledOnTouchOutside(false);
             // show dialog
             asyncDialog.show();
             super.onPreExecute();
