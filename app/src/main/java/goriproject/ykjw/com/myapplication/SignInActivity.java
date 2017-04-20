@@ -81,12 +81,12 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     if(cb_login.isChecked()) {
                         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
                         SharedPreferences.Editor editor = pref.edit();
-                        editor.putString("autologin", key);
+                        editor.putString("token", key);
                         editor.commit();
                     } else {
                         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
                         SharedPreferences.Editor editor = pref.edit();
-                        editor.putString("autologin", null);
+                        editor.putString("token", null);
                         editor.commit();
                     }
 

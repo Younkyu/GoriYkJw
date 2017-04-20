@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
 
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
-        key = pref.getString("autologin", "");
+        key = pref.getString("token", "");
         Log.e("kkkkknjjjjjjjjjjjk",key);
         if(key != null && key.length() > 0) {
             is_signin = true;
