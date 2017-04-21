@@ -236,6 +236,8 @@ public class Second_OneFragment extends Fragment implements YouTubePlayer.OnInit
             tv_title_youtube.setVisibility(View.GONE);
             FrameLayout yt = (FrameLayout)view.findViewById(R.id.fragment_youtube_player);
             yt.setVisibility(View.GONE);
+            View view6 = (View)view.findViewById(R.id.viewOne6);
+            view6.setVisibility(View.GONE);
         }
         //관련 이미지
         if(td.getClass_images() != null) {

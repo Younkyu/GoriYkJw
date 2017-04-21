@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -92,6 +93,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
                     is_signin = true;
                     // goriproject.ykjw.com.myapplication.domain.Result@42ca77a0
+                    View view = getCurrentFocus();
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
                     finish();
                 } else {
                     Toast.makeText(SignInActivity.this, "아이디와 비밀번호를 확인해주세요", Toast.LENGTH_SHORT).show();

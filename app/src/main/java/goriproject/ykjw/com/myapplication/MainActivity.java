@@ -474,6 +474,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     location_menu.setVisibility(View.GONE);
                     category_menu.setVisibility(View.GONE);
                     tv_location.setText("전체 지역");
+                    tv_category.setText("전체 카테고리");
                     img.setImageResource(R.drawable.arrow_down);
                     location_menu_count++;
                     datas2.addAll(datas);
@@ -489,6 +490,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(MainActivity.this, "아직 조건에 맞는 클래스가 없습니다.", Toast.LENGTH_LONG).show();
                     location_menu.setVisibility(View.GONE);
                     category_menu.setVisibility(View.GONE);
+                    tv_location.setText("전체 지역");
                     tv_category.setText("전체 카테고리");
                     img2.setImageResource(R.drawable.arrow_down);
                     category_menu_count++;
@@ -610,12 +612,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //TODO 고리소개 페이지로드
         } else if (id == R.id.menu_signinout) {
             if(is_signin) {
-                key = null;
+                key = "";
                 is_signin = false;
                 item.setTitle("로그인");
                 SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
                 SharedPreferences.Editor editor = pref.edit();
-                editor.putString("autologin", null);
+                editor.putString("token", "");
                 editor.commit();
                 Toast.makeText(MainActivity.this, "정상적으로 로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
             }else {
