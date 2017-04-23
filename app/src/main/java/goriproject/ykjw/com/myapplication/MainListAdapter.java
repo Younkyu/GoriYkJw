@@ -1,5 +1,6 @@
 package goriproject.ykjw.com.myapplication;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -42,6 +43,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
     int itemLayout;
     TalentDetail td;
     Intent intent;
+    Activity activity;
     Context context; // 클릭처리, 애니메이션 등을 위해 시스템자원 사용이 필요
     // 리스트 각 행에서 사용되는 레이아웃 xml의 아이디디
 
@@ -49,6 +51,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
         this.datas = datas;
         this.itemLayout = itemLayout;
         this.context = context;
+        activity = (Activity) context;
     }
 
     @Override
@@ -62,9 +65,6 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
     public void onBindViewHolder(MainListAdapter.CustomViewHolder holder, int position) {
 
         holder.item = datas.get(position);
-
-//        holder.ratingBar.setRating(item.getTutor_rating()/20);
-//        int rating = (Integer.parseInt(holder.item.getAverage_rate()));
 
         long ratinglong = Math.round(Double.parseDouble(holder.item.getAverage_rate()));
         int rating = (int)ratinglong;
@@ -84,12 +84,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
         holder.class_name.setText(holder.item.getTitle());
         holder.tutor_name.setText(holder.item.getTutor().getName());
         holder.id = Integer.parseInt(holder.item.getPk().trim());
-
-//        if(tutors.getCampus().equals("고려대")) {
-//            Glide.with(context).load(R.drawable.profile_dummy2).into(holder.imageView2);
-//        } else {
-            Glide.with(context).load(holder.item.getTutor().getProfile_image()).into(holder.imageView2);
-//        }
+        Glide.with(context).load(holder.item.getTutor().getProfile_image()).into(holder.imageView2);
         Glide.with(context).load(holder.item.getCover_image()).thumbnail(0.1f).into(new ViewTarget<ConstraintLayout, GlideDrawable>(holder.itemback) {
             @Override
             public void onResourceReady(GlideDrawable resource, GlideAnimation anim) {
@@ -104,7 +99,6 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
     public int getItemCount() {
         return datas.size();
     }
-
 
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
@@ -172,19 +166,14 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
                     .baseUrl("https://mozzi.co.kr/api/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-
             Talent_Detail_Interface tdService = retrofit.create(Talent_Detail_Interface.class);
-
             final Call<TalentDetail> tds = tdService.getTalentDetail(String.valueOf(id));
-
             try {
                 td = tds.execute().body();
             } catch (IOException e) {
                 e.printStackTrace();
             }
             intent.putExtra("td",td);
-
-
             return null;
         }
 
@@ -192,10 +181,9 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
         protected void onPostExecute(Void result) {
             asyncDialog.dismiss();
             context.startActivity(intent);
+            activity.overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
             super.onPostExecute(result);
         }
     }
-
-
 
 }

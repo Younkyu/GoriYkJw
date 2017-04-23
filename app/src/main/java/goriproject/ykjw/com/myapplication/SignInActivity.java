@@ -99,6 +99,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
                     finish();
+                    overridePendingTransition(R.anim.anim_slide_in_bottom, R.anim.anim_slide_out_top);
                 } else {
                     Toast.makeText(SignInActivity.this, "아이디와 비밀번호를 확인해주세요", Toast.LENGTH_SHORT).show();
                 }
@@ -117,6 +118,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.singupgo :
                 Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.anim_slide_in_top, R.anim.anim_slide_out_bottom);
                 finish();
                 break;
         }

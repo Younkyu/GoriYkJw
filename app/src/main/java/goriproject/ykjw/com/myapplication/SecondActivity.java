@@ -36,6 +36,9 @@ import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.tsengvn.typekit.TypekitContextWrapper;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import goriproject.ykjw.com.myapplication.Custom.CustomScrollView;
 import goriproject.ykjw.com.myapplication.Custom.RadiusImageView;
 import goriproject.ykjw.com.myapplication.domain.Results;
@@ -55,7 +58,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     Second_FourFragment four;
     RatingBar rating_second;
     FrameLayout frameLayout;
-
+    @BindView(R.id.btnApplySecondTemp)  Button btnApplySecondTemp;
     ImageView imageView1;                   // 이미지뷰
     RadiusImageView imageView2;
 
@@ -70,7 +73,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
     DrawerLayout drawer;
     NavigationView navigationView;
-
+    int id;
     Talent talent;
     TalentDetail td = new TalentDetail();
     float txtTitle_y_position = 0;
@@ -105,26 +108,21 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             logoutitem.setTitle(R.string.logoutitem);
         }
 
-
-
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second_view);
+        ButterKnife.bind(this);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
 
         Intent intent = getIntent();
-        final int id = intent.getExtras().getInt("id");
+        id = intent.getExtras().getInt("id");
         Results item = (Results)intent.getSerializableExtra("item");
         td = (TalentDetail)intent.getSerializableExtra("td");
-
-
-
-        Log.e("sdfdfdfadfasd", String.valueOf(td.getTitle()));
 
 
         // 탭 레이아웃 & 뷰페이저 초기화
@@ -140,7 +138,6 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         mTabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager_second_activity));
         viewPager_second_activity.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
-
         //드로어레이아웃
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -152,30 +149,26 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         two = Second_TwoFragment.newInstance(td);
         three = Second_ThreeFragment.newInstance(td);
         four = new Second_FourFragment();
-        Log.e("sdfdfdfadfasd2222", String.valueOf(td.getTitle()));
         one.setTalent(talent,item, td);
         four.setTalent(talent,item);
         one.setActivity(this);
 
-        // 버튼 초기화
-        Button btnApplySecondTemp = (Button)findViewById(R.id.btnApplySecondTemp);
         btnApplySecondTemp.bringToFront();
-        btnApplySecondTemp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-             if(is_signin) {
-                Intent intent = new Intent(SecondActivity.this, ApplyActivity.class);
-                intent.putExtra("id", id);
-                intent.putExtra("td", td);
-                startActivity(intent);
-            } else {
-                Intent intent = new Intent(SecondActivity.this, SignInActivity.class);
-                startActivity(intent);
-            }
-            }
-        });
 
+    }
 
+    @OnClick(R.id.btnApplySecondTemp) void submit() {
+        if(is_signin) {
+            Intent intent = new Intent(SecondActivity.this, ApplyActivity.class);
+            intent.putExtra("id", id);
+            intent.putExtra("td", td);
+            startActivity(intent);
+            overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
+        } else {
+            Intent intent = new Intent(SecondActivity.this, SignInActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
+        }
     }
 
     // 위시리스트 결과를 보여주는 대화상자
@@ -207,6 +200,9 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
         if (id == R.id.menu_introduce_gori) {
             //TODO 고리소개 페이지로드
+
+            overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);
+
         } else if (id == R.id.menu_signinout) {
             if(is_signin) {
                 key = null;
@@ -214,7 +210,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
                 item.setTitle("로그인");
                 SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
                 SharedPreferences.Editor editor = pref.edit();
-                editor.putString("autologin", null);
+                editor.putString("token", null);
                 editor.commit();
                 Toast.makeText(SecondActivity.this, "정상적으로 로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
             }else {
@@ -223,7 +219,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             }
 
         } else if (id == R.id.menu_mypage) {
-            //TODO 마이페이지 고
+
             Intent intent = new Intent(SecondActivity.this, MyPageActivity.class);
             startActivity(intent);
         } else if (id == R.id.menu_tutor_go) {

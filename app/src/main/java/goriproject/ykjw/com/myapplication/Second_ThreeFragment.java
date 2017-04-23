@@ -215,8 +215,8 @@ public class Second_ThreeFragment extends Fragment {
 
         // Dialog 사이즈 조절 하기
         ViewGroup.LayoutParams params = dialog.getWindow().getAttributes();
-        params.width = 950;      //params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-        params.height = 1500;    //params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+        params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         dialog.getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
 
 
