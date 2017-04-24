@@ -1,16 +1,18 @@
-package goriproject.ykjw.com.myapplication.domain;
-
+package goriproject.ykjw.com.myapplication.domain_mypage_retrieve;
 
 import java.io.Serializable;
 
 /**
- * Created by JINWOO on 2017-04-13.
+ * Created by JINWOO on 2017-04-20.
  */
-public class User implements Serializable
-{
+
+public class Tutor_info implements Serializable {
+
     private String profile_image;
 
     private String name;
+
+    private String user_id;
 
     private String pk;
 
@@ -34,6 +36,16 @@ public class User implements Serializable
         this.name = name;
     }
 
+    public String getUser_id ()
+    {
+        return user_id;
+    }
+
+    public void setUser_id (String user_id)
+    {
+        this.user_id = user_id;
+    }
+
     public String getPk ()
     {
         return pk;
@@ -47,7 +59,6 @@ public class User implements Serializable
     @Override
     public String toString()
     {
-        return "ClassPojo [profile_image = "+profile_image+", name = "+name+", pk = "+pk+"]";
+        return "ClassPojo [profile_image = "+profile_image+", name = "+name+", user_id = "+user_id+", pk = "+pk+"]";
     }
 }
-

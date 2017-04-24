@@ -41,7 +41,16 @@ import org.androidannotations.annotations.ViewById;
 import java.util.ArrayList;
 import java.util.List;
 
+import goriproject.ykjw.com.myapplication.Interfaces.Mypage_Detail_Interface;
+import goriproject.ykjw.com.myapplication.Interfaces.User_Detail_Interface;
 import goriproject.ykjw.com.myapplication.domain.Results;
+import goriproject.ykjw.com.myapplication.domain_User_detail_all.UserDetail;
+import goriproject.ykjw.com.myapplication.domain_mypage_retrieve.MyPage;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static goriproject.ykjw.com.myapplication.Statics.datas;
 import static goriproject.ykjw.com.myapplication.Statics.is_signin;
@@ -580,8 +589,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    // 여기는 소트 부분인데 지금은 나중에 rating이 들어오면 수정할 예정
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -611,9 +618,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
         } else if (id == R.id.menu_mypage) {
-            //TODO 마이페이지 고
-            intent = new Intent(MainActivity.this, MyPageActivity.class);
-            startActivity(intent);
+            if(is_signin){
+                createRetrofitGET_MYPAGE();
+            } else {
+                intent = new Intent(MainActivity.this, SignInActivity.class);
+                startActivity(intent);
+            }
+            overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);
         } else if (id == R.id.menu_tutor_go) {
             // 아직 구현할 생각 없음
             Toast.makeText(MainActivity.this, "튜터등록은 웹사이트에서 해주세요!", Toast.LENGTH_SHORT).show();
@@ -672,6 +683,68 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             super.onPostExecute(result);
         }
     }
+
+    public void createRetrofitGET_MYPAGE() {
+        Log.i("RAPSTAR","======================== This is createRetrofitGET_Mypage()");
+
+        // 1. 레트로핏을 생성하고
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://mozzi.co.kr/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        Mypage_Detail_Interface mypage_detail_interface = retrofit.create(Mypage_Detail_Interface.class);
+
+        Log.i("RAPSTAR","========================token : " + key);
+
+        Call<MyPage> myPageCalla = mypage_detail_interface.getMyPageRetrieve("Token " + key);
+        myPageCalla.enqueue(new Callback<MyPage>() {
+            @Override
+            public void onResponse(Call<MyPage> call, Response<MyPage> response) {
+                MyPage myPageFromServer = response.body();
+                createRetrofitUserGet(myPageFromServer);
+
+
+            }
+            @Override
+            public void onFailure(Call<MyPage> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+
+
+    }
+
+    public void createRetrofitUserGet(final MyPage myPageFromServer){
+        // 1. 레트로핏을 생성하고
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://mozzi.co.kr/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        User_Detail_Interface tdService = retrofit.create(User_Detail_Interface.class);
+
+        Call<UserDetail> tds = tdService.getUserRetrieve("Token " + key);
+
+        tds.enqueue(new Callback<UserDetail>() {
+            @Override
+            public void onResponse(Call<UserDetail> call, Response<UserDetail> response) {
+                UserDetail userDetail = response.body();   // 현재 사용하는 유저 정보를 먼저 불러온다.
+                Intent intent = new Intent(MainActivity.this, MyPageActivity.class);
+                intent.putExtra("mypage",myPageFromServer);
+                intent.putExtra("userInformation", userDetail);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(Call<UserDetail> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+
 
 }
 

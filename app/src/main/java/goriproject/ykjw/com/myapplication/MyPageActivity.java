@@ -20,13 +20,24 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import goriproject.ykjw.com.myapplication.Custom.CircleImageView;
+import goriproject.ykjw.com.myapplication.domain_User_detail_all.UserDetail;
+import goriproject.ykjw.com.myapplication.domain_mypage_retrieve.MyPage;
+
 import static goriproject.ykjw.com.myapplication.Statics.is_signin;
 import static goriproject.ykjw.com.myapplication.Statics.key;
+import static goriproject.ykjw.com.myapplication.Statics.user_name;
 
 /**
  * MyPage에서 수강생 탭과 튜터 탭을 보여준다.
@@ -40,11 +51,26 @@ public class MyPageActivity extends AppCompatActivity implements NavigationView.
     DrawerLayout drawer;
     NavigationView navigationView;
 
+    MyPage myPage = null;
+    UserDetail userDetail = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mypage);
+
+        Intent intent = getIntent();
+        myPage = (MyPage)intent.getSerializableExtra("mypage");
+        userDetail = (UserDetail)intent.getSerializableExtra("userInformation");
+
+
+        // mypage 상단 부분분
+        TextView txtName_profile_mypage = (TextView)findViewById(R.id.txtName_profile_mypage);
+        txtName_profile_mypage.setText(userDetail.getName());
+        CircleImageView img_profile_mypage = (CircleImageView)findViewById(R.id.img_profile_mypage);
+        Glide.with(this).load(userDetail.getProfile_image()).placeholder(R.mipmap.ic_launcher).into(img_profile_mypage); // 이미지 표시
+
+
 
         // 드로어레이아웃
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout_mypage);
@@ -52,7 +78,7 @@ public class MyPageActivity extends AppCompatActivity implements NavigationView.
         navigationView.setNavigationItemSelectedListener(this);
 
         // 프래그먼트
-        TuteeFragment = new MypageTuteeFragment();
+        TuteeFragment = MypageTuteeFragment.newInstance(myPage);
         TutorFragment = new MypageTutorFragment();
 
         TabLayout outerTab = (TabLayout)findViewById(R.id.outerTab);
@@ -135,7 +161,7 @@ public class MyPageActivity extends AppCompatActivity implements NavigationView.
             }
 
         } else if (id == R.id.menu_mypage) {
-
+            // 동작할 필요 없음.
         } else if (id == R.id.menu_tutor_go) {
             // 아직 구현할 생각 없음
             Toast.makeText(MyPageActivity.this, "튜터등록은 웹사이트에서 해주세요!", Toast.LENGTH_LONG).show();
@@ -147,6 +173,7 @@ public class MyPageActivity extends AppCompatActivity implements NavigationView.
 
     @Override
     public void onBackPressed() {
+        //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout_mypage);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -164,8 +191,26 @@ public class MyPageActivity extends AppCompatActivity implements NavigationView.
         private static final String TAG = "RAPSTAR";
         View view = null;
 
+        MyPage mypage = null;
+
         public MypageTuteeFragment() {
             // Required empty public constructor
+        }
+
+        public static MypageTuteeFragment newInstance(MyPage mypage){
+            Bundle args = new Bundle();
+            MypageTuteeFragment mypageTuteeFragment = new MypageTuteeFragment();
+            args.putSerializable("mypage", mypage);
+            mypageTuteeFragment.setArguments(args);
+            return mypageTuteeFragment;
+        }
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            if(getArguments() != null) {
+                mypage = (MyPage)getArguments().getSerializable("mypage");
+            }
         }
 
         @Override
@@ -188,9 +233,9 @@ public class MyPageActivity extends AppCompatActivity implements NavigationView.
             PagerAdapter pagerTuteeAdapter = new PagerAdapter(getChildFragmentManager());
 
             // 어뎁터에 프래그먼트 추가
-            pagerTuteeAdapter.add(MyPageTuteeOfListFragment.newInstance(MyPageTuteeOfListFragment.TYPE_APPLICATION));
-            pagerTuteeAdapter.add(MyPageTuteeOfListFragment.newInstance(MyPageTuteeOfListFragment.TYPE_CLASSLIST));
-            pagerTuteeAdapter.add(MyPageTuteeOfListFragment.newInstance(MyPageTuteeOfListFragment.TYPE_WISHLIST));
+            pagerTuteeAdapter.add(MyPageTuteeOfListFragment.newInstance(MyPageTuteeOfListFragment.TYPE_APPLICATION, mypage ));
+            pagerTuteeAdapter.add(MyPageTuteeOfListFragment.newInstance(MyPageTuteeOfListFragment.TYPE_CLASSLIST, mypage));
+            pagerTuteeAdapter.add(MyPageTuteeOfListFragment.newInstance(MyPageTuteeOfListFragment.TYPE_WISHLIST, mypage));
 
             // 리스너
             viewPagerTutee.setAdapter(pagerTuteeAdapter);
@@ -213,11 +258,7 @@ public class MyPageActivity extends AppCompatActivity implements NavigationView.
             super.onDestroyView();
         }
 
-        @Override
-        public void onCreate(@Nullable Bundle savedInstanceState) {
-            Log.i(TAG, "==================================TuteeFragment OnCreate()");
-            super.onCreate(savedInstanceState);
-        }
+
 
         public class PagerAdapter extends FragmentStatePagerAdapter {
 

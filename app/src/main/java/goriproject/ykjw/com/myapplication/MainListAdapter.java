@@ -25,10 +25,13 @@ import com.bumptech.glide.request.target.ViewTarget;
 import java.io.IOException;
 import java.util.List;
 
+import goriproject.ykjw.com.myapplication.Interfaces.Review_Detail_Interface;
 import goriproject.ykjw.com.myapplication.Interfaces.Talent_Detail_Interface;
 import goriproject.ykjw.com.myapplication.domain.Results;
 import goriproject.ykjw.com.myapplication.domain.TalentDetail;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -44,6 +47,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
     TalentDetail td;
     Intent intent;
     Activity activity;
+    ProgressDialog asyncDialog;
     Context context; // 클릭처리, 애니메이션 등을 위해 시스템자원 사용이 필요
     // 리스트 각 행에서 사용되는 레이아웃 xml의 아이디디
 
@@ -128,6 +132,12 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
                      intent.putExtra("id",id);
                      intent.putExtra("item", item);
 
+                     asyncDialog = new ProgressDialog(context);
+                     asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                     asyncDialog.setMessage("데이터 로딩중..");
+                     asyncDialog.setCanceledOnTouchOutside(false);
+                     asyncDialog.show();
+
                      CheckTypesTask task = new CheckTypesTask();
                      task.setid(id);
                      task.execute();
@@ -140,8 +150,6 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
 
     private class CheckTypesTask extends AsyncTask<Void, Void, Void> {
 
-        ProgressDialog asyncDialog = new ProgressDialog(
-                context);
 
         int id = 0;
 
@@ -151,11 +159,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
 
         @Override
         protected void onPreExecute() {
-            asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            asyncDialog.setMessage("데이터 로딩중..");
-            asyncDialog.setCanceledOnTouchOutside(false);
-            // show dialog
-            asyncDialog.show();
+
             super.onPreExecute();
         }
 
@@ -166,24 +170,41 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.Custom
                     .baseUrl("https://mozzi.co.kr/api/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
+
             Talent_Detail_Interface tdService = retrofit.create(Talent_Detail_Interface.class);
+
             final Call<TalentDetail> tds = tdService.getTalentDetail(String.valueOf(id));
-            try {
-                td = tds.execute().body();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            intent.putExtra("td",td);
+
+            tds.enqueue(new Callback<TalentDetail>() {
+                @Override
+                public void onResponse(Call<TalentDetail> call, Response<TalentDetail> response) {
+                    td = response.body();
+
+                    intent.putExtra("td",td);
+                    context.startActivity(intent);
+
+                    if(asyncDialog.isShowing() || asyncDialog != null) {
+                        asyncDialog.dismiss();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<TalentDetail> call, Throwable t) {
+
+                }
+            });
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
-            asyncDialog.dismiss();
-            context.startActivity(intent);
-            activity.overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
+
+
             super.onPostExecute(result);
         }
     }
+
+
+
 
 }

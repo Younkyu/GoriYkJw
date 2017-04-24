@@ -5,8 +5,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
@@ -27,23 +25,29 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
+
 
 
 import goriproject.ykjw.com.myapplication.Custom.CircleImageView;
 import goriproject.ykjw.com.myapplication.Interfaces.Review_Detail_Interface;
 
 
+import goriproject.ykjw.com.myapplication.Interfaces.Talent_Detail_Interface;
 import goriproject.ykjw.com.myapplication.Interfaces.User_Detail_Interface;
+import goriproject.ykjw.com.myapplication.domain.Reviews;
 import goriproject.ykjw.com.myapplication.domain.TalentDetail;
+import goriproject.ykjw.com.myapplication.domain.User;
 import goriproject.ykjw.com.myapplication.domain_User_detail_all.UserDetail;
-import goriproject.ykjw.com.myapplication.domain_review_retrieve.ReviewsSecThreeFrag;
-import goriproject.ykjw.com.myapplication.domain_review_retrieve.User;
+import goriproject.ykjw.com.myapplication.domain_review_retrieve.ReviewResponse;
+import goriproject.ykjw.com.myapplication.domain_review_retrieve.ReviewDetail;
+
 import goriproject.ykjw.com.myapplication.domain_review_retrieve.Results;
 
 import okhttp3.OkHttpClient;
@@ -54,44 +58,45 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static android.content.Context.MODE_PRIVATE;
 import static goriproject.ykjw.com.myapplication.Statics.is_signin;
+import static goriproject.ykjw.com.myapplication.Statics.key;
+import static goriproject.ykjw.com.myapplication.Statics.user_name;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ *  Talent detail all(API) : reviews 구조 <-> Review(API) : results 구조
  */
-
 public class Second_ThreeFragment extends Fragment {
     private static final String TAG = "RAPSTAR";
     private static final String KEY_FOR_TALENTDETAIL = "threeFragmentTL";
-    private static final String KEY_FOR_TALENTDETAIL_INT = "threeFragmentTL_INT";
-    private static final String KEY_FOR_TOKEN = "threeFragmentToken";
 
     Context context = null;
+    View view = null;
     PagerAdapter adapter = null;
-
-    List<goriproject.ykjw.com.myapplication.domain_review_retrieve.Results> results_list = null;
 
     Dialog dialog = null; // 다이얼로그
 
-    ReviewsSecThreeFrag reviewsSecThreeFrag = null; // GET으로 받을 내용들
-
     TalentDetail td = null;
+    List<Reviews>  reviews = null;
 
     UserDetail userDetail = null;
 
     RecyclerView recyclerReview = null;
 
+    ProgressDialog asyncDialog = null;
+
+    TextView txtReview_count, txtAverageRate;
+    RatingBar ratingBar_average, ratingBar_AverageCurriculum, ratingBar_AverageReadiness, ratingBar_AverageTimeliness, ratingBar_AverageDelivery, ratingBar_AverageFriendliness;
 
     public Second_ThreeFragment() {
         // Required empty public constructor
     }
 
-    public static Second_ThreeFragment newInstance(TalentDetail td ){
+    public static Second_ThreeFragment newInstance(TalentDetail td){
         Second_ThreeFragment secondThreeFragment = new Second_ThreeFragment();
         Bundle args = new Bundle();
         args.putSerializable(KEY_FOR_TALENTDETAIL, td);
+
         secondThreeFragment.setArguments(args);
         return secondThreeFragment;
     }
@@ -102,16 +107,18 @@ public class Second_ThreeFragment extends Fragment {
         if(getArguments() != null){
             this.td = (TalentDetail)getArguments().getSerializable(KEY_FOR_TALENTDETAIL);
         }
-        createRetrofitGET();
     }
 
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.notifyDataSetChanged();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = null;
         if(view != null){
             return view;
         }
@@ -119,16 +126,32 @@ public class Second_ThreeFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_second_three, container, false);
         context = view.getContext();
 
-
-        TextView txtReview_count = (TextView)view.findViewById(R.id.txtReview_count);
-        TextView txtAverageRate = (TextView)view.findViewById(R.id.txtAverageRate);
+        // 위젯 초기화
+        txtReview_count = (TextView)view.findViewById(R.id.txtReview_count);
+        txtAverageRate = (TextView)view.findViewById(R.id.txtAverageRate);
         txtReview_count.setText(td.getReview_count());
         txtAverageRate.setText(td.getAverage_rates().getTotal());
+        ratingBar_average = (RatingBar)view.findViewById(R.id.rb_Avrage);
+        ratingBar_AverageCurriculum = (RatingBar)view.findViewById(R.id.rb_average_curriculum);
+        ratingBar_AverageReadiness = (RatingBar)view.findViewById(R.id.rb_average_readiness);
+        ratingBar_AverageTimeliness = (RatingBar)view.findViewById(R.id.rb_average_timeliness);
+        ratingBar_AverageDelivery = (RatingBar)view.findViewById(R.id.rb_average_delivery);
+        ratingBar_AverageFriendliness = (RatingBar)view.findViewById(R.id.rb_average_friendliness);
 
-        // RatingBar (Total)
-        RatingBar ratingBar_average = (RatingBar)view.findViewById(R.id.rb_Avrage);
-        long ratinglong = Math.round(Double.parseDouble(td.getAverage_rates().getTotal()));
-        ratingBar_average.setRating((int)ratinglong);
+        // 위젯 세팅
+        long ratinglong_average = Math.round(Double.parseDouble(td.getAverage_rates().getTotal()));
+        long ratinglong_curriculum = Math.round(Double.parseDouble(td.getAverage_rates().getCurriculum()));
+        long ratinglong_readiness = Math.round(Double.parseDouble(td.getAverage_rates().getReadiness()));
+        long ratinglong_timeliness = Math.round(Double.parseDouble(td.getAverage_rates().getTimeliness()));
+        long ratinglong_delivery = Math.round(Double.parseDouble(td.getAverage_rates().getDelivery()));
+        long ratinglong_friendliness = Math.round(Double.parseDouble(td.getAverage_rates().getFriendliness()));
+        ratingBar_average.setRating((int)ratinglong_average);
+        ratingBar_AverageCurriculum.setRating((int)ratinglong_curriculum);
+        ratingBar_AverageReadiness.setRating((int)ratinglong_readiness);
+        ratingBar_AverageTimeliness.setRating((int)ratinglong_timeliness);
+        ratingBar_AverageDelivery.setRating((int)ratinglong_delivery);
+        ratingBar_AverageFriendliness.setRating((int)ratinglong_friendliness);
+
 
 
         // 버튼 : 리뷰 작성
@@ -150,11 +173,21 @@ public class Second_ThreeFragment extends Fragment {
 
         // 리사이클러뷰 설정
         recyclerReview = (RecyclerView) view.findViewById(R.id.recycView_fragmentsecond_three);
+        adapter = new PagerAdapter(getContext());
+        //results_list = new ArrayList<>();
+        reviews = new ArrayList<>();
+        for (int i = 0; i < td.getReviews().size(); i++) {
+            reviews.add(td.getReviews().get(i));      // Results() --> List<Results>로 : 동적할당
+        }
+        adapter.setData(reviews);
+        recyclerReview.setAdapter(adapter);
+        recyclerReview.setLayoutManager(new LinearLayoutManager(context));
+
 
         return view;
     }
 
-    public void createRetrofitUserGet(final Boolean showDialogCheck, final goriproject.ykjw.com.myapplication.domain_review_retrieve.Results passedResults){
+    public void createRetrofitUserGet(final Reviews passedReviews){
         // 1. 레트로핏을 생성하고
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://mozzi.co.kr/api/")
@@ -163,39 +196,26 @@ public class Second_ThreeFragment extends Fragment {
 
         User_Detail_Interface tdService = retrofit.create(User_Detail_Interface.class);
 
-        // 프로그레스 다이얼로그
-        final ProgressDialog asyncDialog = new ProgressDialog(context);
-        asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        asyncDialog.setMessage("로딩중입니다..");
-        asyncDialog.show();
-
-        // 토큰 받아오기
-        SharedPreferences pref = getContext().getSharedPreferences("pref", MODE_PRIVATE);
-        String token = pref.getString("token", null);
-
-        Call<UserDetail> tds = tdService.getUserRetrieve("Token " + token);
+        Call<UserDetail> tds = tdService.getUserRetrieve("Token " + key);
 
         tds.enqueue(new Callback<UserDetail>() {
             @Override
             public void onResponse(Call<UserDetail> call, Response<UserDetail> response) {
                 userDetail = response.body();   // 현재 사용하는 유저 정보를 먼저 불러온다.
-                if(showDialogCheck){
-                    // 3. POST 이후 데이터를 따로 데이터 저장소에 보낸다.
-                    results_list.add(passedResults);
-                    adapter.setData(results_list);                     // 2.1 데이터 추가하고
-                    adapter.notifyDataSetChanged();                // 2.2 어뎁터 갱신
-                } else {
-                    // 리사이클러뷰에서 데이터 세팅
-                    adapter = new Second_ThreeFragment.PagerAdapter(getContext());
-                    results_list = new ArrayList<>();
-                    for (int i = 0; i < reviewsSecThreeFrag.getResults().length; i++) {
-                        results_list.add(reviewsSecThreeFrag.getResults()[i]);      // Results() --> List<Results>로 : 동적할당
-                    }
-                    adapter.setData(results_list);
-                    recyclerReview.setAdapter(adapter);
-                    recyclerReview.setLayoutManager(new LinearLayoutManager(context));
-                }
-                asyncDialog.dismiss();
+
+
+                // 3. POST 이후 데이터를 따로 데이터 저장소에 보낸다.
+                User user  = new User();
+                user.setName(userDetail.getName());
+                user.setProfile_image(userDetail.getProfile_image());
+                passedReviews.setUser(user);
+
+                reviews.add(passedReviews);
+                adapter.setData(reviews);                     // 2.1 데이터 추가하고
+                adapter.notifyDataSetChanged();                // 2.2 어뎁터 갱신
+
+                createRetrofitGET_TalentDetailAgain();
+
             }
 
             @Override
@@ -215,10 +235,9 @@ public class Second_ThreeFragment extends Fragment {
 
         // Dialog 사이즈 조절 하기
         ViewGroup.LayoutParams params = dialog.getWindow().getAttributes();
-        params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-        params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        params.width = 950;      //params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+        params.height = 1500;    //params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         dialog.getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
-
 
         // Dialog 위젯
         ImageButton btnFinish = (ImageButton)dialog.findViewById(R.id.btnReviewFinish_second_review);
@@ -262,12 +281,6 @@ public class Second_ThreeFragment extends Fragment {
                 // 1. POST 처리
                 createRetrofitPOST(editReview, rtCurriculum, rtReadiness, rtTimeliness, rtDelivery, rtFriendness );
 
-
-                // 2. GET : User 정보 받아오기
-                createRetrofitUserGet(true, createLocalDateStore(editReview, rtCurriculum, rtReadiness, rtTimeliness, rtDelivery, rtFriendness));
-
-
-
                 // 다이얼로그 처리
                 if(dialog != null && dialog.isShowing()){
                     Log.i(TAG, "============================================dialog 1");
@@ -277,29 +290,12 @@ public class Second_ThreeFragment extends Fragment {
         });
     }
 
-    public Results createLocalDateStore(String editReview, String rtCurriculum, String rtReadiness, String rtTimeliness, String rtDelivery, String rtFriendness ){
-        User user  = new User();
-        user.setName(userDetail.getName());
-        user.setProfile_image(userDetail.getProfile_image());
 
-        Log.i(TAG, "=================user id " + userDetail.getUser_id());
-        Log.i(TAG, "=================user image " + userDetail.getProfile_image());
+    /*
+         여기서 사용 안함
+     */
+    public void createRetrofitGET_TalentDetailAgain() {
 
-        Results results = new Results();
-        results.setCurriculum(rtCurriculum);
-        results.setReadiness(rtReadiness);
-        results.setTimeliness(rtTimeliness);
-        results.setDelivery(rtDelivery);
-        results.setFriendliness(rtFriendness);
-        results.setComment(editReview);
-        results.setUser(user);
-        results.setCreated_date(new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis())) + "T");
-
-        return results;
-    }
-
-    public void createRetrofitGET() {
-        Log.i("RAPSTAR","======================== This is createRetrofitGET_Three()");
 
         // 1. 레트로핏을 생성하고
         Retrofit retrofit = new Retrofit.Builder()
@@ -307,20 +303,40 @@ public class Second_ThreeFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        Review_Detail_Interface tdService = retrofit.create(Review_Detail_Interface.class);
+        Talent_Detail_Interface tdService = retrofit.create(Talent_Detail_Interface.class);
 
-        Call<ReviewsSecThreeFrag> tds = tdService.getReviewRetrieve(td.getPk());
-        tds.enqueue(new Callback<ReviewsSecThreeFrag>() {
+        final Call<TalentDetail> tds = tdService.getTalentDetail(td.getPk());
+
+        tds.enqueue(new Callback<TalentDetail>() {
             @Override
-            public void onResponse(Call<ReviewsSecThreeFrag> call, Response<ReviewsSecThreeFrag> response) {
-                // 데이터 받아오고
-                reviewsSecThreeFrag = response.body();
-                // 현재 사용하고 있는 유저정보 받고 시작하라
-                createRetrofitUserGet(false, null);
+            public void onResponse(Call<TalentDetail> call, Response<TalentDetail> response) {
+                TalentDetail td_again = response.body();
+                // 뷰 다시그려주기
+                txtReview_count.setText(td_again.getReview_count());
+                txtAverageRate.setText(td_again.getAverage_rates().getTotal());
+                long ratinglong_average = Math.round(Double.parseDouble(td_again.getAverage_rates().getTotal()));
+                long ratinglong_curriculum = Math.round(Double.parseDouble(td_again.getAverage_rates().getCurriculum()));
+                long ratinglong_readiness = Math.round(Double.parseDouble(td_again.getAverage_rates().getReadiness()));
+                long ratinglong_timeliness = Math.round(Double.parseDouble(td_again.getAverage_rates().getTimeliness()));
+                long ratinglong_delivery = Math.round(Double.parseDouble(td_again.getAverage_rates().getDelivery()));
+                long ratinglong_friendliness = Math.round(Double.parseDouble(td_again.getAverage_rates().getFriendliness()));
+                ratingBar_average.setRating((int)ratinglong_average);
+                ratingBar_AverageCurriculum.setRating((int)ratinglong_curriculum);
+                ratingBar_AverageReadiness.setRating((int)ratinglong_readiness);
+                ratingBar_AverageTimeliness.setRating((int)ratinglong_timeliness);
+                ratingBar_AverageDelivery.setRating((int)ratinglong_delivery);
+                ratingBar_AverageFriendliness.setRating((int)ratinglong_friendliness);
+                view.postInvalidate();
+
+                // 다이얼로그 닫기
+                if(asyncDialog != null || asyncDialog.isShowing()) {
+                    asyncDialog.dismiss();
+                }
 
             }
+
             @Override
-            public void onFailure(Call<ReviewsSecThreeFrag> call, Throwable t) {
+            public void onFailure(Call<TalentDetail> call, Throwable t) {
 
             }
         });
@@ -328,7 +344,7 @@ public class Second_ThreeFragment extends Fragment {
 
     }
 
-    public void createRetrofitPOST(String editReview, String rtCurriculum, String rtReadiness, String rtTimeliness, String rtDelivery, String rtFriendness ){
+    public void createRetrofitPOST(final String editReview,final String rtCurriculum,final String rtReadiness,final String rtTimeliness,final String rtDelivery,final String rtFriendness ){
         // 2. POST 통신
         // 2.1 통신 로그 확인
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -336,6 +352,12 @@ public class Second_ThreeFragment extends Fragment {
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(logging);
+
+        // 프로그레스 다이얼로그
+        asyncDialog = new ProgressDialog(getContext());
+        asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        asyncDialog.setMessage("로딩중입니다..");
+        asyncDialog.show();
 
         // 2.2 레트로핏을 생성
         Retrofit retrofit = new Retrofit.Builder()
@@ -346,12 +368,8 @@ public class Second_ThreeFragment extends Fragment {
 
         Review_Detail_Interface service = retrofit.create(Review_Detail_Interface.class);
 
-        // 토큰 받아오기
-        SharedPreferences pref = getContext().getSharedPreferences("pref", MODE_PRIVATE);
-        String token = pref.getString("token", null);
-
         // 2.3 데이터 받아오기
-        Call<String> reviewData = service.setReviewRetrieve("Token " + token ,
+        Call<ReviewResponse> reviewData = service.setReviewRetrieve("Token " + key ,
                 Integer.valueOf(td.getPk()),
                 Integer.valueOf(rtCurriculum) ,
                 Integer.valueOf(rtReadiness) ,
@@ -362,19 +380,36 @@ public class Second_ThreeFragment extends Fragment {
         );
 
 
-        reviewData.enqueue(new Callback<String>() {
-            // POST는 Response가 안온다.
+        reviewData.enqueue(new Callback<ReviewResponse>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<ReviewResponse> call, Response<ReviewResponse> response) {
+                //  GET : User 정보 받아오기
+                createRetrofitUserGet( createLocalDateStore(editReview, rtCurriculum, rtReadiness, rtTimeliness, rtDelivery, rtFriendness));
             }
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<ReviewResponse> call, Throwable t) {
             }
 
         });
 
 
 
+    }
+
+    public Reviews createLocalDateStore(String editReview, String rtCurriculum, String rtReadiness, String rtTimeliness, String rtDelivery, String rtFriendness ){
+
+
+
+        Reviews reviewsData_after_post = new Reviews();
+        reviewsData_after_post.setCurriculum(rtCurriculum);
+        reviewsData_after_post.setReadiness(rtReadiness);
+        reviewsData_after_post.setTimeliness(rtTimeliness);
+        reviewsData_after_post.setDelivery(rtDelivery);
+        reviewsData_after_post.setFriendliness(rtFriendness);
+        reviewsData_after_post.setComment(editReview);
+        reviewsData_after_post.setCreated_date(new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis())) + "T");
+
+        return reviewsData_after_post;
     }
 
     public void createRetrofitDelete(String review_pk){
@@ -396,11 +431,11 @@ public class Second_ThreeFragment extends Fragment {
         Review_Detail_Interface service = retrofit.create(Review_Detail_Interface.class);
 
         // 토큰 받아오기
-        SharedPreferences pref = getContext().getSharedPreferences("pref", MODE_PRIVATE);
-        String token = pref.getString("token", null);
+//
 
-        // 2.4 데이터 받아오기
-        Call<Void> reviewDelete = service.deleteReview("Token " + token, review_pk);
+        // 2.4 데이터 받아오기        SharedPreferences pref = getContext().getSharedPreferences("pref", MODE_PRIVATE);
+//        String token = pref.getString("token", null);
+        Call<Void> reviewDelete = service.deleteReview("Token " + key, review_pk);
         // Log.i(TAG, "==========================token : " + token + ", pk : " + reviews_Pager.get(review_position).getPk());
 
         reviewDelete.enqueue(new Callback<Void>() {
@@ -434,15 +469,16 @@ public class Second_ThreeFragment extends Fragment {
 
         private static final String TAG = "RAPSTAR";
         private Context context = null;
-        List<goriproject.ykjw.com.myapplication.domain_review_retrieve.Results> results = new ArrayList<>(); // 데이터 저장소
+        //List<goriproject.ykjw.com.myapplication.domain_review_retrieve.Results> results = new ArrayList<>(); // 데이터 저장소
+        List<Reviews> reviewsList = null;
 
         public PagerAdapter(Context context){
             this.context = context;
 
         }
 
-        public void setData(List<goriproject.ykjw.com.myapplication.domain_review_retrieve.Results> results){
-            this.results = results;
+        public void setData(List<Reviews> reviews){
+            this.reviewsList = reviews;
         }
 
         @Override
@@ -455,33 +491,33 @@ public class Second_ThreeFragment extends Fragment {
         @Override
         public int getItemCount() {
             //return reviews_Pager.size();
-            return results.size();
+            return reviews.size();
         }
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
 
-            Glide.with(context).load(results.get(position).getUser().getProfile_image()).placeholder(R.mipmap.ic_launcher).into(holder.img); // 이미지 표시
-            holder.txtName.setText(results.get(position).getUser().getName());             // 이름 표시
-            holder.txtComment.setText(results.get(position).getComment());           // Comment  표시
-            String date = results.get(position).getCreated_date();         // 날짜 표시 (시간을 제외한 일자만 표시한다.)
+            Glide.with(context).load(reviews.get(position).getUser().getProfile_image()).placeholder(R.mipmap.ic_launcher).into(holder.img); // 이미지 표시
+            holder.txtName.setText(reviews.get(position).getUser().getName());             // 이름 표시
+            holder.txtComment.setText(reviews.get(position).getComment());           // Comment  표시
+            String date = reviews.get(position).getCreated_date();         // 날짜 표시 (시간을 제외한 일자만 표시한다.)
             holder.txtDate.setText(date.substring(0,date.indexOf("T")));
 
             // 별점 표시 (평균값 구해서 출력)
-            Double ave_total = (double)(Double.valueOf(results.get(position).getCurriculum())
-                    + Double.valueOf(results.get(position).getReadiness())
-                    + Double.valueOf(results.get(position).getTimeliness())
-                    + Double.valueOf(results.get(position).getDelivery())
-                    + Double.valueOf(results.get(position).getFriendliness()))/5;
+            Double ave_total = (double)(Double.valueOf(reviews.get(position).getCurriculum())
+                    + Double.valueOf(reviews.get(position).getReadiness())
+                    + Double.valueOf(reviews.get(position).getTimeliness())
+                    + Double.valueOf(reviews.get(position).getDelivery())
+                    + Double.valueOf(reviews.get(position).getFriendliness()))/5;
             holder.ratingBar.setRating(Math.round(Double.parseDouble(ave_total + "")));
 
 
             // 버튼 : 리뷰삭제
-            // if(holder.txtName.getText().equals(td.getUser())){ // 현재 사용자랑 같은 이름인지 체크
-            if(is_signin && userDetail != null){
-                if(holder.txtName.getText().equals(userDetail.getUser_id())){
+            if(is_signin){
+                if ( user_name.equals(holder.txtName.getText())) {
+
                     final int review_position = position;
-                    final String review_pk = results.get(position).getPk();   // 현재 아이템에 해당하는 PK
+                    final String review_pk = reviews.get(position).getPk();   // 현재 아이템에 해당하는 PK
                     holder.btnDelete_fragment_review.setVisibility(View.VISIBLE);
                     holder.btnDelete_fragment_review.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -499,29 +535,29 @@ public class Second_ThreeFragment extends Fragment {
 
                             Review_Detail_Interface tdService = retrofit.create(Review_Detail_Interface.class);
 
-                            Call<ReviewsSecThreeFrag> tds = tdService.getReviewRetrieve(td.getPk());
-                            tds.enqueue(new Callback<ReviewsSecThreeFrag>() {
+                            Call<ReviewDetail> tds = tdService.getReviewRetrieve(td.getPk());
+                            tds.enqueue(new Callback<ReviewDetail>() {
                                 @Override
-                                public void onResponse(Call<ReviewsSecThreeFrag> call, Response<ReviewsSecThreeFrag> response) {
-                                    ReviewsSecThreeFrag reviewsSecThreeFrag = response.body();
+                                public void onResponse(Call<ReviewDetail> call, Response<ReviewDetail> response) {
+                                    ReviewDetail reviewsSecThreeFrag = response.body();
 
-                                    if(TextUtils.isEmpty(results.get(review_position).getPk())){
+                                    if(TextUtils.isEmpty(reviews.get(review_position).getPk())){
                                         // 지울 정보의 pk를 찾는다.
-                                        createRetrofitDelete(findPK(review_position, results, reviewsSecThreeFrag));
+                                        createRetrofitDelete(findPK(review_position, reviews, reviewsSecThreeFrag));
 
                                     } else {
-                                        Log.i(TAG, "======== value of pk : " + results.get(review_position).getPk());
-                                        createRetrofitDelete(results.get(review_position).getPk());
+                                        Log.i(TAG, "======== value of pk : " + reviews.get(review_position).getPk());
+                                        createRetrofitDelete(reviews.get(review_position).getPk());
                                     }
                                     asyncDialog.dismiss();
                                     // 리뷰 삭제하고 데이터 업데이트
-                                    results.remove(review_position);
-                                    adapter.setData(results);
+                                    reviews.remove(review_position);
+                                    adapter.setData(reviews);
                                     adapter.notifyDataSetChanged();
 
                                 }
                                 @Override
-                                public void onFailure(Call<ReviewsSecThreeFrag> call, Throwable t) {
+                                public void onFailure(Call<ReviewDetail> call, Throwable t) {
 
                                 }
                             });
@@ -537,12 +573,12 @@ public class Second_ThreeFragment extends Fragment {
 
         }
 
-        public String findPK(int review_position, List<Results> results, ReviewsSecThreeFrag reviewsSecThreeFrag){
+        public String findPK(int review_position, List<Reviews> reviewsList, ReviewDetail reviewsSecThreeFrag){
             String foundPK = "";
             for(int indexOfPk = 0; indexOfPk< reviewsSecThreeFrag.getResults().length; indexOfPk++){
                 if(userDetail.getName().equals(reviewsSecThreeFrag.getResults()[indexOfPk].getUser().getName() )
-                        && results.get(review_position).getCreated_date().substring(0,results.get(review_position).getCreated_date().indexOf("T")).equals(reviewsSecThreeFrag.getResults()[indexOfPk].getCreated_date().substring(0,reviewsSecThreeFrag.getResults()[indexOfPk].getCreated_date().indexOf("T")))
-                        && reviewsSecThreeFrag.getResults()[indexOfPk].getComment().contains(results.get(review_position).getComment()))
+                        && reviewsList.get(review_position).getCreated_date().substring(0,reviewsList.get(review_position).getCreated_date().indexOf("T")).equals(reviewsSecThreeFrag.getResults()[indexOfPk].getCreated_date().substring(0,reviewsSecThreeFrag.getResults()[indexOfPk].getCreated_date().indexOf("T")))
+                        && reviewsSecThreeFrag.getResults()[indexOfPk].getComment().contains(reviewsList.get(review_position).getComment()))
                 {
                     Log.i(TAG, "========  FOUND! : " + reviewsSecThreeFrag.getResults()[indexOfPk].getPk());
                     foundPK = reviewsSecThreeFrag.getResults()[indexOfPk].getPk();
@@ -559,7 +595,6 @@ public class Second_ThreeFragment extends Fragment {
             CircleImageView img;
             RatingBar ratingBar;
             Button btnDelete_fragment_review;
-            boolean clicked = false;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -572,23 +607,25 @@ public class Second_ThreeFragment extends Fragment {
                 ratingBar = (RatingBar)itemView.findViewById(R.id.rb_tutee_fragment_review);
                 btnDelete_fragment_review = (Button)itemView.findViewById(R.id.btnDelete_fragment_review);
 
+                /*  코멘트 화면의 사이즈를 조절(불필요)
                 csLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if( !clicked) {
+                        if( !clicked ) {
                             ViewGroup.LayoutParams params = txtComment.getLayoutParams();
                             params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
                             txtComment.setLayoutParams(params);
                             clicked = true;
-                        } else if (clicked) {
+                        } else if (clicked && txtComment.getText().length()>10) {
                             ViewGroup.LayoutParams params = txtComment.getLayoutParams();
                             params.height = 75;
                             txtComment.setLayoutParams(params);
                             clicked = false;
                         }
                     }
-                });
+                });*/
             }
+
 
         }
     }

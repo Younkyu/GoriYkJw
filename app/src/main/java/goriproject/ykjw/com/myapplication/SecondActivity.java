@@ -1,5 +1,6 @@
 package goriproject.ykjw.com.myapplication;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -41,8 +42,19 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import goriproject.ykjw.com.myapplication.Custom.CustomScrollView;
 import goriproject.ykjw.com.myapplication.Custom.RadiusImageView;
+import goriproject.ykjw.com.myapplication.Interfaces.Mypage_Detail_Interface;
+import goriproject.ykjw.com.myapplication.Interfaces.User_Detail_Interface;
+import goriproject.ykjw.com.myapplication.Interfaces.WishList_Toggle_Interface;
 import goriproject.ykjw.com.myapplication.domain.Results;
 import goriproject.ykjw.com.myapplication.domain.TalentDetail;
+import goriproject.ykjw.com.myapplication.domain_User_detail_all.UserDetail;
+import goriproject.ykjw.com.myapplication.domain_mypage_retrieve.MyPage;
+import goriproject.ykjw.com.myapplication.domain_wishlist.WishList;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static goriproject.ykjw.com.myapplication.Statics.is_signin;
 import static goriproject.ykjw.com.myapplication.Statics.key;
@@ -148,12 +160,27 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         one = new Second_OneFragment();
         two = Second_TwoFragment.newInstance(td);
         three = Second_ThreeFragment.newInstance(td);
-        four = new Second_FourFragment();
+        four = Second_FourFragment.newInstance(td);
         one.setTalent(talent,item, td);
-        four.setTalent(talent,item);
         one.setActivity(this);
 
         btnApplySecondTemp.bringToFront();
+
+        ImageButton btnWishList = (ImageButton) findViewById(R.id.btnWishList);
+        btnWishList.bringToFront();
+        btnWishList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 요청
+                if(is_signin) {
+                    createRetrofitGET_WishList();
+                } else {
+                    Intent intent = new Intent(SecondActivity.this, SignInActivity.class);
+                    startActivity(intent);
+                }
+
+            }
+        });
 
     }
 
@@ -220,8 +247,13 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
         } else if (id == R.id.menu_mypage) {
 
-            Intent intent = new Intent(SecondActivity.this, MyPageActivity.class);
-            startActivity(intent);
+            if(is_signin){
+                createRetrofitGET_MYPAGE();
+            } else {
+                Intent intent = new Intent(SecondActivity.this, SignInActivity.class);
+                startActivity(intent);
+
+            }
         } else if (id == R.id.menu_tutor_go) {
             // 아직 구현할 생각 없음
             Toast.makeText(SecondActivity.this, "튜터등록은 웹사이트에서 해주세요!", Toast.LENGTH_LONG).show();
@@ -299,6 +331,109 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
         ShareDialog shareDialog = new ShareDialog(this);
         shareDialog.show(content, ShareDialog.Mode.FEED);   //AUTOMATIC, FEED, NATIVE, WEB 등이 있으며 이는 다이얼로그 형식을 말합니다.
+    }
+
+    public void createRetrofitGET_MYPAGE() {
+        Log.i("RAPSTAR","======================== This is createRetrofitGET_Mypage()");
+
+        // 1. 레트로핏을 생성하고
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://mozzi.co.kr/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        Mypage_Detail_Interface mypage_detail_interface = retrofit.create(Mypage_Detail_Interface.class);
+
+        // 토큰 받아오기
+        SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+        String token = pref.getString("token", null);
+
+
+
+        Call<MyPage> myPageCalla = mypage_detail_interface.getMyPageRetrieve("Token " + key);
+        myPageCalla.enqueue(new Callback<MyPage>() {
+            @Override
+            public void onResponse(Call<MyPage> call, Response<MyPage> response) {
+                MyPage myPageFromServer = response.body();
+                createRetrofitUserGet(myPageFromServer);
+
+
+
+            }
+            @Override
+            public void onFailure(Call<MyPage> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+
+
+    }
+
+    public void createRetrofitUserGet(final MyPage myPageFromServer){
+        // 1. 레트로핏을 생성하고
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://mozzi.co.kr/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        User_Detail_Interface tdService = retrofit.create(User_Detail_Interface.class);
+
+        Call<UserDetail> tds = tdService.getUserRetrieve("Token " + key);
+
+        tds.enqueue(new Callback<UserDetail>() {
+            @Override
+            public void onResponse(Call<UserDetail> call, Response<UserDetail> response) {
+                UserDetail userDetail = response.body();   // 현재 사용하는 유저 정보를 먼저 불러온다.
+                Intent intent = new Intent(SecondActivity.this, MyPageActivity.class);
+                intent.putExtra("mypage",myPageFromServer);
+                intent.putExtra("userInformation", userDetail);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(Call<UserDetail> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    public void createRetrofitGET_WishList(){
+        // 1. 레트로핏을 생성하고
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://mozzi.co.kr/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        WishList_Toggle_Interface wishList_toggle_interface = retrofit.create(WishList_Toggle_Interface.class);
+
+        // 프로그레스 다이얼로그
+        final ProgressDialog asyncDialog = new ProgressDialog(SecondActivity.this);
+        asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        asyncDialog.setMessage("잠시만 기다려주십시오..");
+        asyncDialog.show();
+
+
+        Call<WishList> tds = wishList_toggle_interface.getWishList("Token " + key, td.getPk());
+
+        tds.enqueue(new Callback<WishList>() {
+            @Override
+            public void onResponse(Call<WishList> call, Response<WishList> response) {
+                if (response.code() == 201) {
+                    Toast.makeText(SecondActivity.this, "위시리스트에 추가되었습니다", Toast.LENGTH_SHORT).show();
+                } else if (response.code() == 200) {
+                    Toast.makeText(SecondActivity.this, "위시리스트에서 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(SecondActivity.this, response.code(), Toast.LENGTH_SHORT).show();
+                }
+                asyncDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<WishList> call, Throwable t) {
+
+            }
+        });
     }
 
 }
