@@ -164,7 +164,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         one.setTalent(talent,item, td);
         one.setActivity(this);
 
-        btnApplySecondTemp.bringToFront();
+        //btnApplySecondTemp.bringToFront();
 
         ImageButton btnWishList = (ImageButton) findViewById(R.id.btnWishList);
         btnWishList.bringToFront();
